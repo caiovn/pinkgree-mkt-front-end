@@ -1,0 +1,20 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: sticky;
+  z-index: 999;
+  top: 0;
+  padding: 16px;
+  background-color: #FFFFFF;
+}
+.buttonWrapper {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+}
+.logo {
+  font-family: 'Pattaya', sans-serif;
+  font-size: 22px;
+}

@@ -1,0 +1,31 @@
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: fixed;
+  z-index: 1000;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px 0;
+  background-color: #FFFFFF;
+  will-change:transform;
+	transform: translateZ(0);
+  height: 55px;
+}
+
+.navbarItem {
+  border: none;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 10px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.icon {
+  font-size: 16px;
+  margin: 4px;
+}
