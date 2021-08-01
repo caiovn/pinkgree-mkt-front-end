@@ -1,6 +1,7 @@
 import Head from 'next/head';
+import withAuth from 'src/hooks/withAuth';
 
-export default function Home() {
+const home = () => {
   return (
     <>
       <Head>
@@ -20,4 +21,6 @@ export default function Home() {
       </section>
     </>
   );
-}
+};
+
+export default withAuth(home)
