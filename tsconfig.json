@@ -6,6 +6,7 @@
       "@/components/*": ["src/components/*"],
       "@/routes/*": ["src/routes/*"],
       "@/styles/*": ["src/styles/*"],
+      "@/constants/*": ["src/constants/*"],
     },
     "target": "es5",
     "lib": [

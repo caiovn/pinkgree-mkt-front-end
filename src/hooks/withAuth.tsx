@@ -15,7 +15,7 @@ const withAuth = <PageProps extends Record<string, unknown>>(Page: NextPage<Page
 
     return(
         <>
-            {initialized && keycloak?.authenticated && (<Page {...(props as PageProps)}/>)}
+            {initialized && keycloak?.authenticated ? (<Page {...(props as PageProps)}/>) : <span>carregando PORRA</span>}
         </>
     );
 }
