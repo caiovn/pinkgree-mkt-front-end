@@ -1,17 +1,23 @@
-const ProductCard = ({ name, price, mainImageUrl, categories }: IProducts) => {
+import Link from 'next/link';
+import ROUTES from '@/routes/routes';
+import {convertToBRLCurrency} from '@/utils/currency';
+import styles from './productCard.module.css';
+
+const ProductCard = ({id, name, price, mainImageUrl}: IProducts) => {
   return (
-    <fieldset style={{ margin: '8px 0' }}>
-      <p>{name}</p>
-      <p>{price}</p>
-      <img src={mainImageUrl} style={{ width: '100%' }} />
-      {categories.map(({ id: categoryId, name: categoryName }) => {
-        return (
-          <div key={categoryId}>
-            <span>{categoryName}</span>
+    <Link href={`${ROUTES.PRODUCT_PAGE}/${id}`}>
+      <a>
+        <div className={styles.container}>
+          <div className={styles.imageWrapper}>
+            <img src={mainImageUrl} alt={name} className={styles.image}/>
           </div>
-        );
-      })}
-    </fieldset>
+          <div className={styles.textWrapper}>
+            <h2 className={styles.productName}>{name}</h2>
+            <p className={styles.price}>{convertToBRLCurrency.format(price)}</p>
+          </div>
+        </div>
+      </a>
+    </Link>
   )
 }
 

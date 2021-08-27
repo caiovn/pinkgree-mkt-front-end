@@ -1,6 +1,14 @@
+.cardContainer {
+  margin: 4px;
+  width: 300px;
+}
+.categoryImage {
+  height: 75px;
+  background-size: cover;
+  background-position: center;
+}
 .root {
   color: #FFFFFF;
   background-color: #000000;
   padding: 12px;
-  margin: 4px;
 }

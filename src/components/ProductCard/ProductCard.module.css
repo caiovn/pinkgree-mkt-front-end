@@ -1,0 +1,23 @@
+.container {
+  margin: 16px 0;
+  border: rgba(0, 0, 0, 0.4) solid 1px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+.image {
+  width: 100%;
+}
+.imageWrapper {
+  width: 150px;
+  height: 150px;
+}
+.textWrapper {
+  padding: 8px;
+}
+.productName {
+  margin: 0 0 16px;
+}
+.price {
+  margin: 0 auto;
+}
