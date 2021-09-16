@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import ROUTES from '@/routes/routes';
 import {convertToBRLCurrency} from '@/utils/currency';
-import styles from './productCard.module.css';
+import styles from './productCard.module.scss';
 
 const ProductCard = ({id, name, price, mainImageUrl}: IProducts) => {
   return (

@@ -6,17 +6,20 @@
   align-items: flex-start;
 }
 .image {
-  width: 100%;
+  width: 7.5rem;
 }
 .imageWrapper {
-  width: 150px;
-  height: 150px;
+  width: 7.5rem;
+  height: 7.5rem;
 }
 .textWrapper {
   padding: 8px;
 }
 .productName {
+  font-size: 20px;
   margin: 0 0 16px;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .price {
   margin: 0 auto;

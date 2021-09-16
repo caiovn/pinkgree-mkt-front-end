@@ -1,6 +1,7 @@
 .cardContainer {
   margin: 4px;
-  width: 300px;
+  max-width: 300px;
+  min-width: 230px;
 }
 .categoryImage {
   height: 75px;

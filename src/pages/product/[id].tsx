@@ -3,6 +3,7 @@ import useFetch from "../../hooks/useFetch";
 import { convertToBRLCurrency } from "@/utils/currency";
 import { Carousel } from '@/components/index';
 import styles from './product.module.scss';
+import { Table } from "@/components/Table";
 
 const ProductPage = () => {
   const router = useRouter()
@@ -11,24 +12,36 @@ const ProductPage = () => {
 
   if (loading) return <span>loading...</span>;
 
-  console.log(product)
-
   return (
     <div>
-      <div>
+      <div className={styles.carousel}>
         <Carousel settings={{ dots: true, slidesToScroll: 1, slidesToShow: 1, arrows: false }}>
           <div className={styles.imageContainer}>
             <img src={product[0].mainImageUrl} alt={product[0].name} />
           </div>
-          {product[0].urlImages.map((image) => (
-            <div className={styles.imageContainer}>
+          {product[0].urlImages.map((image, index) => (
+            <div className={styles.imageContainer} key={`carousel-${index}`}>
               <img src={image} alt="ooo" />
             </div>
           ))}
         </Carousel>
       </div>
-      <h2>{product[0].name}</h2>
+      <h2 className={styles.name}>{product[0].name}</h2>
       <p className={styles.price}>{convertToBRLCurrency.format(product[0].price.listPrice)}</p>
+      {product[0].skuAttributes.length > 0 && (
+        <details open>
+          <summary>Ficha técnica</summary>
+          <div className={styles.productDetailContainer}>
+            <Table skuAttributes={product[0].skuAttributes} />
+          </div>
+        </details>
+      )}
+      <details open>
+          <summary>Dimensões</summary>
+          <div className={styles.productDetailContainer}>
+            <Table skuAttributes={[{ label: 'altura', type: '', value: String(product[0].height) }]} />
+          </div>
+        </details>
     </div>
   );
 }

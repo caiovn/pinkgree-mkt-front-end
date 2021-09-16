@@ -7,11 +7,10 @@ class MyDocument extends Document {
         <Head>
           <script src="https://kit.fontawesome.com/707614de62.js" crossOrigin="anonymous" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
           <link
             href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=STIX+Two+Text:wght@700&display=swap"
             rel="stylesheet" />
-          <title>pinkgreen</title>
         </Head>
         <body>
           <Main />

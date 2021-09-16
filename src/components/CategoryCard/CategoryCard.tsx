@@ -1,4 +1,4 @@
-import styles from './CategoryCard.module.css';
+import styles from './CategoryCard.module.scss';
 import Link from 'next/link'
 
 export default function CategoryCard({name, id, image}) {
