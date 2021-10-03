@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import Head from 'next/head'
 
 export default function Favs() {
   return (
@@ -10,5 +10,5 @@ export default function Favs() {
         <h1>Favs</h1>
       </section>
     </>
-  );
+  )
 }

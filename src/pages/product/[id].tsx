@@ -1,21 +1,31 @@
-import { useRouter } from "next/router";
-import useFetch from "../../hooks/useFetch";
-import { convertToBRLCurrency } from "@/utils/currency";
-import { Carousel } from '@/components/index';
-import styles from './product.module.scss';
-import { Table } from "@/components/Table";
+import { Carousel } from '@/components/index'
+import { Table } from '@/components/Table'
+import { convertToBRLCurrency } from '@/utils/currency'
+import { useRouter } from 'next/router'
+import useFetch from '../../hooks/useFetch'
+import styles from './product.module.scss'
 
 const ProductPage = () => {
   const router = useRouter()
   const { id } = router.query
-  const { data: product, loading } = useFetch<ISku[]>('GET', `sku/product_skus/${id}`);
+  const { data: product, loading } = useFetch<ISku[]>(
+    'GET',
+    `sku/product_skus/${id}`
+  )
 
-  if (loading) return <span>loading...</span>;
+  if (loading) return <span>loading...</span>
 
   return (
     <div>
       <div className={styles.carousel}>
-        <Carousel settings={{ dots: true, slidesToScroll: 1, slidesToShow: 1, arrows: false }}>
+        <Carousel
+          settings={{
+            dots: true,
+            slidesToScroll: 1,
+            slidesToShow: 1,
+            arrows: false,
+          }}
+        >
           <div className={styles.imageContainer}>
             <img src={product[0].mainImageUrl} alt={product[0].name} />
           </div>
@@ -27,7 +37,9 @@ const ProductPage = () => {
         </Carousel>
       </div>
       <h2 className={styles.name}>{product[0].name}</h2>
-      <p className={styles.price}>{convertToBRLCurrency.format(product[0].price.listPrice)}</p>
+      <p className={styles.price}>
+        {convertToBRLCurrency.format(product[0].price.listPrice)}
+      </p>
       {product[0].skuAttributes.length > 0 && (
         <details open>
           <summary>Ficha técnica</summary>
@@ -37,13 +49,17 @@ const ProductPage = () => {
         </details>
       )}
       <details open>
-          <summary>Dimensões</summary>
-          <div className={styles.productDetailContainer}>
-            <Table skuAttributes={[{ label: 'altura', type: '', value: String(product[0].height) }]} />
-          </div>
-        </details>
+        <summary>Dimensões</summary>
+        <div className={styles.productDetailContainer}>
+          <Table
+            skuAttributes={[
+              { label: 'altura', type: '', value: String(product[0].height) },
+            ]}
+          />
+        </div>
+      </details>
     </div>
-  );
+  )
 }
 
-export default ProductPage;
+export default ProductPage

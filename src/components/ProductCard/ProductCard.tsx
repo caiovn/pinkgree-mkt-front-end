@@ -1,15 +1,15 @@
-import Link from 'next/link';
-import ROUTES from '@/routes/routes';
-import {convertToBRLCurrency} from '@/utils/currency';
-import styles from './productCard.module.scss';
+import ROUTES from '@/routes/routes'
+import { convertToBRLCurrency } from '@/utils/currency'
+import Link from 'next/link'
+import styles from './productCard.module.scss'
 
-const ProductCard = ({id, name, price, mainImageUrl}: IProducts) => {
+const ProductCard = ({ id, name, price, mainImageUrl }: IProduct) => {
   return (
     <Link href={`${ROUTES.PRODUCT_PAGE}/${id}`}>
       <a>
         <div className={styles.container}>
           <div className={styles.imageWrapper}>
-            <img src={mainImageUrl} alt={name} className={styles.image}/>
+            <img src={mainImageUrl} alt={name} className={styles.image} />
           </div>
           <div className={styles.textWrapper}>
             <h2 className={styles.productName}>{name}</h2>
@@ -21,4 +21,4 @@ const ProductCard = ({id, name, price, mainImageUrl}: IProducts) => {
   )
 }
 
-export default ProductCard;
+export default ProductCard

@@ -1,9 +1,9 @@
+import { BASE_URL } from '@/constants/api'
 import { useEffect, useState } from 'react'
-import { BASE_URL } from '@/constants/api';
 
 export interface ErrorResponse {
-  statusCode: number;
-  message: string;
+  statusCode: number
+  message: string
 }
 
 export interface FetchResponse<R> {
@@ -22,7 +22,7 @@ function request(
     // eslint-disable-next-line promise/param-names
     new Promise<Response>((_, reject) => {
       setTimeout(() => reject(new Error('timeout')), timeout)
-    })
+    }),
   ])
 }
 
@@ -39,7 +39,7 @@ function useFetch<R, P = void>(
   useEffect(() => {
     if (isReady) {
       const headers = new Headers({
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       })
       const requestOptions: RequestInit = { method, headers }
       if (body) {
@@ -60,7 +60,7 @@ function useFetch<R, P = void>(
           setLoading(false)
           setError({
             message: responseError.statusText,
-            statusCode: responseError.status
+            statusCode: responseError.status,
           })
         })
     }

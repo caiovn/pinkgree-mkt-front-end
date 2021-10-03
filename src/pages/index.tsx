@@ -1,7 +1,7 @@
-import Head from 'next/head';
-import { GetStaticProps } from 'next';
 import { Carousel, CategoryCard } from '@/components/index';
 import { BASE_URL } from '@/constants/api';
+import { GetStaticProps } from 'next';
+import Head from 'next/head';
 
 const Home = ({ categories }: {categories: Array<ICategory>}) => {
   return (
@@ -21,7 +21,7 @@ const Home = ({ categories }: {categories: Array<ICategory>}) => {
   );
 };
 
-export const getStaticProps: GetStaticProps<{categories: Array<ICategories>}>  = async () => {
+export const getStaticProps: GetStaticProps<{categories: Array<ICategory>}>  = async () => {
   const res = await(await fetch(`${BASE_URL}/category`)).json();
   return { props: { categories: res } }
 }
