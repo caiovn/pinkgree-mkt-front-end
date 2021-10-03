@@ -1,4 +1,5 @@
-import { Carousel } from "./Carousel";
-import { CategoryCard } from "./CategoryCard";
+import { Carousel } from './Carousel'
+import { CategoryCard } from './CategoryCard'
 
-export { Carousel, CategoryCard };
+export { Carousel, CategoryCard }
+

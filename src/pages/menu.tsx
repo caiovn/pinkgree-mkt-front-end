@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import Head from 'next/head'
 
 export default function Menu() {
   return (
@@ -10,5 +10,5 @@ export default function Menu() {
         <h1>Menu</h1>
       </section>
     </>
-  );
+  )
 }

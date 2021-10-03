@@ -1,6 +1,6 @@
-import Link from 'next/link';
-import ROUTES from '@/routes/routes';
-import styles from './TopNavbar.module.css';
+import ROUTES from '@/routes/routes'
+import Link from 'next/link'
+import styles from './TopNavbar.module.css'
 
 const TopNavbar = () => {
   return (
@@ -12,7 +12,7 @@ const TopNavbar = () => {
         <i className="fas fa-shopping-bag" aria-label="carrinho" />
       </button>
     </div>
-  );
+  )
 }
 
-export default TopNavbar;
+export default TopNavbar

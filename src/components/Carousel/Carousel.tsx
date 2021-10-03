@@ -1,10 +1,10 @@
-import Slider, { Settings } from 'react-slick';
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { ReactNode } from "react";
+import { ReactNode } from 'react'
+import Slider, { Settings } from 'react-slick'
+import 'slick-carousel/slick/slick-theme.css'
+import 'slick-carousel/slick/slick.css'
 
 interface CarouselProps {
-  children: ReactNode,
+  children: ReactNode
   settings?: Settings
 }
 
@@ -16,9 +16,5 @@ export default function Carousel({ children, settings }: CarouselProps) {
     ...settings,
   }
 
-  return (
-    <Slider {...defaultSettings}>
-      {children}
-    </Slider>
-  );
-};
+  return <Slider {...defaultSettings}>{children}</Slider>
+}
