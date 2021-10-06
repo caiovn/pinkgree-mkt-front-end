@@ -21,7 +21,7 @@ const Home = ({ categories }: {categories: Array<ICategory>}) => {
   );
 };
 
-export const getStaticProps: GetStaticProps<{categories: Array<ICategories>}>  = async () => {
+export const getStaticProps: GetStaticProps<{categories: Array<ICategory>}>  = async () => {
   const res = await(await fetch(`${BASE_URL}/category`)).json();
   return { props: { categories: res } }
 }

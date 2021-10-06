@@ -1,0 +1,227 @@
+{
+  "category": [
+    {
+      "id": 1,
+      "name": "Informatica",
+      "image": "https://imgur.com/c20GJPz.gif"
+    },
+    {
+      "id": 2,
+      "name": "Eletrodomésticos",
+      "image": "https://imgur.com/c20GJPz.gif"
+    },
+    {
+      "id": 3,
+      "name": "Celulares e smartphones",
+      "image": "https://imgur.com/c20GJPz.gif"
+    }
+  ],
+  "product-category": [
+    {
+      "id": 1,
+      "name": "Notebook Aspire 5",
+      "price": 3704.05,
+      "active": true,
+      "mainImageUrl": "https://imgur.com/c20GJPz.gif",
+      "brand": {
+        "id": 1,
+        "name": "Acer"
+      },
+      "categories": [
+        {
+          "id": 1,
+          "name": "Informatica",
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Notebook Samsung Book",
+      "price": 3181.55,
+      "active": true,
+      "mainImageUrl": "https://imgur.com/c20GJPz.gif",
+      "brand": {
+        "id": 2,
+        "name": "Samsung"
+      },
+      "categories": [
+        {
+          "id": 1,
+          "name": "Informatica",
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Galaxy S10e",
+      "price": 2400.0,
+      "active": true,
+      "mainImageUrl": "https://imgur.com/c20GJPz.gif",
+      "brand": {
+        "id": 2,
+        "name": "Samsung"
+      },
+      "categories": [
+        {
+          "id": 1,
+          "name": "Informatica",
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "TV S41",
+      "price": 3000.0,
+      "active": true,
+      "mainImageUrl": "https://imgur.com/c20GJPz.gif",
+      "brand": {
+        "id": 2,
+        "name": "Samsung"
+      },
+      "categories": [
+        {
+          "id": 1,
+          "name": "Informatica",
+          "image": null
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Xaiomi Mi9",
+      "price": 1400.0,
+      "active": true,
+      "mainImageUrl": "https://imgur.com/c20GJPz.gif",
+      "brand": {
+        "id": 6,
+        "name": "Xaiomi"
+      },
+      "categories": [
+        {
+          "id": 1,
+          "name": "Informatica",
+          "image": null
+        }
+      ]
+    }
+  ],
+  "product-skus": [
+    {
+      "skuCode": "A513-54-57EN",
+      "name": "Notebook Aspire 5 - Intel Core i3 - 4GB 256GB SSD 15,6” Full HD LED Windows 10",
+      "stockQuantity": 10,
+      "height": 10.0,
+      "width": 10.0,
+      "length": 10.0,
+      "weight": 10.0,
+      "mainImageUrl": "https://imgur.com/c20GJPz.gif",
+      "urlImages": [
+        "https://imgur.com/c20GJPz.gif",
+        "https://imgur.com/c20GJPz.gif",
+        "https://imgur.com/c20GJPz.gif"
+      ],
+      "price": {
+        "listPrice": 3004.85,
+        "salePrice": 1458.32,
+        "startDate": "2021-10-04T14:21:20.087852200Z",
+        "endDate": "2021-10-13T14:21:20.087852200Z"
+      },
+      "skuAttributes": [
+        {
+          "label": "Memória RAM",
+          "type": "memory",
+          "value": "4GB"
+        },
+        {
+          "label": "Capacidade do SSD",
+          "type": "ssd",
+          "value": "256GB de armazenamento SSD NVMe x4"
+        },
+        {
+          "label": "Sistema operacional",
+          "type": "os",
+          "value": "Windows 10 Home 64-bit"
+        }
+      ]
+    },
+    {
+      "skuCode": "A515-54-57EN",
+      "name": "Notebook Aspire 5 - Intel Core i5 - 8GB 256GB SSD 15,6” Full HD LED Windows 10",
+      "stockQuantity": 10,
+      "height": 10.0,
+      "width": 10.0,
+      "length": 10.0,
+      "weight": 10.0,
+      "mainImageUrl": "https://imgur.com/c20GJPz.gif",
+      "urlImages": [
+        "https://imgur.com/c20GJPz.gif",
+        "https://imgur.com/c20GJPz.gif",
+        "https://imgur.com/c20GJPz.gif"
+      ],
+      "price": {
+        "listPrice": 3704.05,
+        "salePrice": 0.0,
+        "startDate": "2021-06-15T03:00:00Z",
+        "endDate": "2021-06-15T03:00:00Z"
+      },
+      "skuAttributes": [
+        {
+          "label": "Memória RAM",
+          "type": "memory",
+          "value": "8GB"
+        },
+        {
+          "label": "Capacidade do SSD",
+          "type": "ssd",
+          "value": "256GB de armazenamento SSD NVMe x4"
+        },
+        {
+          "label": "Sistema operacional",
+          "type": "os",
+          "value": "Windows 10 Home 64-bit"
+        }
+      ]
+    },
+    {
+      "skuCode": "A517-54-57EN",
+      "name": "Notebook Aspire 5 - Intel Core i7 - 16GB 480GB SSD 15,6” Full HD LED Windows 10",
+      "stockQuantity": 10,
+      "height": 10.0,
+      "width": 10.0,
+      "length": 10.0,
+      "weight": 10.0,
+      "mainImageUrl": "https://imgur.com/c20GJPz.gif",
+      "urlImages": [
+        "https://imgur.com/c20GJPz.gif",
+        "https://imgur.com/c20GJPz.gif",
+        "https://imgur.com/c20GJPz.gif"
+      ],
+      "price": {
+        "listPrice": 3904.05,
+        "salePrice": 2556.89,
+        "startDate": "2021-10-04T14:21:20.087852200Z",
+        "endDate": "2021-10-13T14:21:20.087852200Z"
+      },
+      "skuAttributes": [
+        {
+          "label": "Memória RAM",
+          "type": "memory",
+          "value": "16GB"
+        },
+        {
+          "label": "Capacidade do SSD",
+          "type": "ssd",
+          "value": "480GB de armazenamento SSD NVMe x4"
+        },
+        {
+          "label": "Sistema operacional",
+          "type": "os",
+          "value": "Windows 10 Home 64-bit"
+        }
+      ]
+    }
+  ]
+}

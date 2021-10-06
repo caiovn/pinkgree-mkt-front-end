@@ -1,0 +1,4 @@
+{
+  "/product/category/:id": "/product-category/",
+  "/sku/product_skus/:id": "/product-skus/"
+}
