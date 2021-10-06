@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import Head from 'next/head'
 
 export default function Search() {
   return (
@@ -10,5 +10,5 @@ export default function Search() {
         <h1>Search</h1>
       </section>
     </>
-  );
+  )
 }

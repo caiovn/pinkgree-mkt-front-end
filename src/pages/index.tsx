@@ -1,7 +1,7 @@
-import Head from 'next/head';
-import { GetStaticProps } from 'next';
 import { Carousel, CategoryCard } from '@/components/index';
 import { BASE_URL } from '@/constants/api';
+import { GetStaticProps } from 'next';
+import Head from 'next/head';
 
 const Home = ({ categories }: {categories: Array<ICategory>}) => {
   return (

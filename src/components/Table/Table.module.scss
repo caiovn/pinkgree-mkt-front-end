@@ -5,13 +5,13 @@
     > tr:nth-child(odd) {
       background-color: #dddddd;
     }
-    > tr > th, > tr > td {
+    > tr > th,
+    > tr > td {
       text-align: left;
       > p {
-        margin: .5rem;
-        font-size: .875rem;
+        margin: 0.5rem;
+        font-size: 0.875rem;
       }
     }
   }
-
 }

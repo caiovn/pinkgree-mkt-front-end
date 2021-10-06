@@ -9,9 +9,9 @@
   left: 0;
   right: 0;
   padding: 8px 0;
-  background-color: #FFFFFF;
-  will-change:transform;
-	transform: translateZ(0);
+  background-color: #ffffff;
+  will-change: transform;
+  transform: translateZ(0);
   height: 55px;
 }
 

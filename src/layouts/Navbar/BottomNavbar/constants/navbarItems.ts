@@ -1,4 +1,4 @@
-import ROUTES from '@/routes/routes';
+import ROUTES from '@/routes/routes'
 
 export const NAVBAR_ITEMS = [
   {
@@ -21,4 +21,4 @@ export const NAVBAR_ITEMS = [
     path: ROUTES.MENU,
     icon: 'fas fa-bars',
   },
-];
+]

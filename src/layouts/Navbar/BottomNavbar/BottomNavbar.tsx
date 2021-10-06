@@ -1,6 +1,6 @@
-import { NAVBAR_ITEMS } from "./constants/navbarItems";
-import Link from 'next/link';
-import styles from './BottomNavbar.module.css';
+import Link from 'next/link'
+import styles from './BottomNavbar.module.css'
+import { NAVBAR_ITEMS } from './constants/navbarItems'
 
 const BottomNavbar = () => {
   return (
@@ -14,7 +14,7 @@ const BottomNavbar = () => {
         </Link>
       ))}
     </nav>
-  );
-};
+  )
+}
 
-export default BottomNavbar;
+export default BottomNavbar
