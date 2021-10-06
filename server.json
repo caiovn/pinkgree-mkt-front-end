@@ -223,5 +223,31 @@
         }
       ]
     }
+  ],
+  "brand": [
+    {
+      "id": 1,
+      "name": "Acer"
+    },
+    {
+      "id": 2,
+      "name": "Samsung"
+    },
+    {
+      "id": 3,
+      "name": "Apple"
+    },
+    {
+      "id": 4,
+      "name": "Electrolux"
+    },
+    {
+      "id": 5,
+      "name": "Esmaltec"
+    },
+    {
+      "id": 6,
+      "name": "Xaiomi"
+    }
   ]
 }
