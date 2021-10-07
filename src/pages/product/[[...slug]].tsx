@@ -1,4 +1,5 @@
 import { Carousel } from '@/components/index'
+import ProductCard from '@/components/ProductCard/ProductCard'
 import { Table } from '@/components/Table'
 import { convertToBRLCurrency } from '@/utils/currency'
 import { useRouter } from 'next/router'
@@ -7,13 +8,18 @@ import styles from './product.module.scss'
 
 const ProductPage = () => {
   const router = useRouter()
-  const { id } = router.query
+  const { slug } = router.query
   const { data: product, loading } = useFetch<ISku[]>(
     'GET',
-    `sku/product_skus/${id}`
+    `sku/product_skus/${slug[0]}`
   )
 
   if (loading) return <span>loading...</span>
+
+  const productMain = product[0];
+  const otherProducts = product.slice(1);
+  console.log("other", otherProducts);
+  console.log("productMain", productMain);
 
   return (
     <div>
@@ -27,24 +33,32 @@ const ProductPage = () => {
           }}
         >
           <div className={styles.imageContainer}>
-            <img src={product[0].mainImageUrl} alt={product[0].name} />
+            <img src={productMain.mainImageUrl} alt={productMain.name} />
           </div>
-          {product[0].urlImages.map((image, index) => (
+          {productMain.urlImages.map((image, index) => (
             <div className={styles.imageContainer} key={`carousel-${index}`}>
               <img src={image} alt="ooo" />
             </div>
           ))}
         </Carousel>
       </div>
-      <h2 className={styles.name}>{product[0].name}</h2>
+      <h2 className={styles.name}>{productMain.name}</h2>
       <p className={styles.price}>
-        {convertToBRLCurrency.format(product[0].price.listPrice)}
+        {convertToBRLCurrency.format(productMain.price.listPrice)}
       </p>
-      {product[0].skuAttributes.length > 0 && (
+      <div>
+        <h2>Relacionados.</h2>
+        <Carousel>
+          {otherProducts.map((oProduct, index) => {
+            return <ProductCard id={index} name={oProduct.name} price={oProduct.price.listPrice} mainImageUrl={oProduct.mainImageUrl} />
+          })}
+        </Carousel>
+      </div>
+      {productMain.skuAttributes.length > 0 && (
         <details open>
           <summary>Ficha técnica</summary>
           <div className={styles.productDetailContainer}>
-            <Table skuAttributes={product[0].skuAttributes} />
+            <Table skuAttributes={productMain.skuAttributes} />
           </div>
         </details>
       )}
@@ -53,7 +67,7 @@ const ProductPage = () => {
         <div className={styles.productDetailContainer}>
           <Table
             skuAttributes={[
-              { label: 'altura', type: '', value: String(product[0].height) },
+              { label: 'altura', type: '', value: String(productMain.height) },
             ]}
           />
         </div>

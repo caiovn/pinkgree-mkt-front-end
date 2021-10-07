@@ -8,9 +8,9 @@ interface ICategory extends IBrand {
 }
 
 interface IProduct {
-  active: boolean
-  brand: IBrand
-  categories: Array<ICategory>
+  active?: boolean
+  brand?: IBrand
+  categories?: Array<ICategory>
   id: number
   mainImageUrl: string
   name: string
