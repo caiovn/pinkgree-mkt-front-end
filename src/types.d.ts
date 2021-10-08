@@ -12,6 +12,7 @@ interface IProduct {
   brand?: IBrand
   categories?: Array<ICategory>
   id: number
+  skuCode?: string
   mainImageUrl: string
   name: string
   price: number
@@ -24,6 +25,7 @@ interface ISku {
   height: number
   width: number
   length: number
+  relatedSkus: Array<IProduct>
   weight: number
   mainImageUrl: string
   urlImages: Array<string>

@@ -3,10 +3,10 @@ import { convertToBRLCurrency } from '@/utils/currency'
 import Link from 'next/link'
 import styles from './ProductCard.module.scss';
 
-const ProductCard = ({ id, name, price, mainImageUrl }: IProduct) => {
+const ProductCard = ({ id, skuCode = '', name, price, mainImageUrl }: IProduct) => {
   return (
-    <Link href={`${ROUTES.PRODUCT_PAGE}/${id}`}>
-      <a>
+    // <Link>
+      <a href={`${ROUTES.PRODUCT_PAGE}/${id}/${skuCode}`}>
         <div className={styles.container}>
           <div className={styles.imageWrapper}>
             <img src={mainImageUrl} alt={name} className={styles.image} />
@@ -17,7 +17,7 @@ const ProductCard = ({ id, name, price, mainImageUrl }: IProduct) => {
           </div>
         </div>
       </a>
-    </Link>
+    // </Link>
   )
 }
 

@@ -9,17 +9,16 @@ import styles from './product.module.scss'
 const ProductPage = () => {
   const router = useRouter()
   const { slug } = router.query
-  const { data: product, loading } = useFetch<ISku[]>(
+  const { 0: productId, 1: skuCode } = slug
+  const { data: product, loading } = useFetch<any>(
     'GET',
-    `sku/product_skus/${slug[0]}`
+    skuCode ? `sku/${skuCode}` : `sku/product_skus/${productId}`
   )
 
   if (loading) return <span>loading...</span>
 
-  const productMain = product[0];
-  const otherProducts = product.slice(1);
-  console.log("other", otherProducts);
-  console.log("productMain", productMain);
+  const productMain = skuCode ? product : product[0]
+  const otherProducts = skuCode ? product.relatedSkus : product.slice(1)
 
   return (
     <div>
@@ -46,13 +45,28 @@ const ProductPage = () => {
       <p className={styles.price}>
         {convertToBRLCurrency.format(productMain.price.listPrice)}
       </p>
+      <button className={styles.buyButton} onClick={() => window.location.href = "/buy"}>Comprar agora</button>
       <div>
-        <h2>Relacionados.</h2>
-        <Carousel>
-          {otherProducts.map((oProduct, index) => {
-            return <ProductCard id={index} name={oProduct.name} price={oProduct.price.listPrice} mainImageUrl={oProduct.mainImageUrl} />
-          })}
-        </Carousel>
+        {otherProducts.length > 0 && (
+          <>
+            <h2>Relacionados.</h2>
+            <Carousel settings={{ adaptiveHeight: true }}>
+              {otherProducts.map((oProduct) => {
+                return (
+                  <div className={styles.otherProductContainer}>
+                    <ProductCard
+                      id={Number(productId)}
+                      skuCode={oProduct.skuCode}
+                      name={oProduct.name}
+                      price={oProduct.price.listPrice}
+                      mainImageUrl={oProduct.mainImageUrl}
+                    />
+                  </div>
+                )
+              })}
+            </Carousel>
+          </>
+        )}
       </div>
       {productMain.skuAttributes.length > 0 && (
         <details open>
