@@ -1,14 +1,19 @@
 import { Carousel } from '@/components/index'
 import ProductCard from '@/components/ProductCard/ProductCard'
+import { productState } from '@/components/States/Atoms'
 import { Table } from '@/components/Table'
+import Button from '@/components/Button'
 import { convertToBRLCurrency } from '@/utils/currency'
 import { useRouter } from 'next/router'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import useFetch from '../../hooks/useFetch'
 import styles from './product.module.scss'
 
 const ProductPage = () => {
   const router = useRouter()
   const { slug } = router.query
+  const setProduct = useSetRecoilState(productState)
+  const getProduct = useRecoilValue(productState)
   const { 0: productId, 1: skuCode } = slug
   const { data: product, loading } = useFetch<any>(
     'GET',
@@ -19,6 +24,14 @@ const ProductPage = () => {
 
   const productMain = skuCode ? product : product[0]
   const otherProducts = skuCode ? product.relatedSkus : product.slice(1)
+
+  console.log('aqui', getProduct)
+
+  const handleClickBuy = () => {
+    setProduct(productMain)
+    console.log(getProduct)
+    router.push('/buy')
+  }
 
   return (
     <div>
@@ -45,12 +58,12 @@ const ProductPage = () => {
       <p className={styles.price}>
         {convertToBRLCurrency.format(productMain.price.listPrice)}
       </p>
-      <button className={styles.buyButton} onClick={() => window.location.href = "/buy"}>Comprar agora</button>
+      <Button onClick={handleClickBuy} color="green">Comprar agora</Button>
       <div>
-        {otherProducts.length > 0 && (
+        {otherProducts && otherProducts.length > 0 && (
           <>
             <h2>Relacionados.</h2>
-            <Carousel settings={{ adaptiveHeight: true }}>
+            <Carousel settings={{ adaptiveHeight: true, dots: true }}>
               {otherProducts.map((oProduct) => {
                 return (
                   <div className={styles.otherProductContainer}>

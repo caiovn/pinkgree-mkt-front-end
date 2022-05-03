@@ -3,6 +3,7 @@ import { SSRCookies, SSRKeycloakProvider } from '@react-keycloak/ssr'
 import cookie from 'cookie'
 import type { IncomingMessage } from 'http'
 import { AppContext, AppProps } from 'next/app'
+import { RecoilRoot } from 'recoil'
 import '../styles/globals.css'
 
 
@@ -22,7 +23,7 @@ interface InitialProps {
 
 function MyApp({ Component, pageProps, cookies }: AppProps & InitialProps) {
   return (
-    <>
+    <RecoilRoot>
       <SSRKeycloakProvider
         keycloakConfig={keycloakCfg}
         persistor={SSRCookies(cookies)}
@@ -36,7 +37,7 @@ function MyApp({ Component, pageProps, cookies }: AppProps & InitialProps) {
           <BottomNavbar />
         </main>
       </SSRKeycloakProvider>
-    </>
+    </RecoilRoot>
   )
 }
 

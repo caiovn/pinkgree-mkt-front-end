@@ -9,7 +9,7 @@ const ProductCard = ({ id, skuCode = '', name, price, mainImageUrl }: IProduct) 
       <a href={`${ROUTES.PRODUCT_PAGE}/${id}/${skuCode}`}>
         <div className={styles.container}>
           <div className={styles.imageWrapper}>
-            <img src={mainImageUrl} alt={name} className={styles.image} />
+            <img src={`${mainImageUrl}`} alt={name} className={styles.image} />
           </div>
           <div className={styles.textWrapper}>
             <h2 className={styles.productName}>{name}</h2>
