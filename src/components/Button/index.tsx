@@ -1,19 +1,24 @@
+import React from 'react'
 import styles from './Button.module.scss'
 
-interface ButtonProps {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   color?: string
-  type?: "button" | "submit" | "reset"
-  onClick?: () => void
-  children: any
 }
 
-const Button = ({ color = 'black', type = "button", onClick, children }: ButtonProps) => {
+const Button = ({
+  color = 'black',
+  type = 'button',
+  onClick,
+  disabled,
+  children,
+}: ButtonProps) => {
   return (
     <button
       className={styles.button}
       onClick={onClick}
       style={{ background: color }}
       type={type}
+      disabled={disabled}
     >
       {children}
     </button>

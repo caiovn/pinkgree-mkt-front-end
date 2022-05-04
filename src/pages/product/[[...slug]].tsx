@@ -1,11 +1,11 @@
 import { Carousel } from '@/components/index'
 import ProductCard from '@/components/ProductCard/ProductCard'
-import { productState } from '@/components/States/Atoms'
+import { formState, productState } from '@/components/States/Atoms'
 import { Table } from '@/components/Table'
 import Button from '@/components/Button'
 import { convertToBRLCurrency } from '@/utils/currency'
 import { useRouter } from 'next/router'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import useFetch from '../../hooks/useFetch'
 import styles from './product.module.scss'
 
@@ -14,6 +14,8 @@ const ProductPage = () => {
   const { slug } = router.query
   const setProduct = useSetRecoilState(productState)
   const getProduct = useRecoilValue(productState)
+  const setFormState = useSetRecoilState(formState)
+  const getFormState = useRecoilState(formState)
   const { 0: productId, 1: skuCode } = slug
   const { data: product, loading } = useFetch<any>(
     'GET',
@@ -29,6 +31,13 @@ const ProductPage = () => {
 
   const handleClickBuy = () => {
     setProduct(productMain)
+    setFormState((oldFormState) => {
+      return {
+        ...oldFormState,
+        step: 0
+      }
+    })
+    console.log('formState', getFormState);
     console.log(getProduct)
     router.push('/buy')
   }
