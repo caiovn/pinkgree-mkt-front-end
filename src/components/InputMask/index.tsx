@@ -19,7 +19,10 @@ export default function InputMask({
 }: InputMaskProps) {
   return (
     <div className={styles.inputContainer}>
-      {label && <label className={styles.label}>{label}</label>}
+      <div className={styles.messageWrapper}>
+        {label && <label className={styles.label}>{label}</label>}
+        {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
+      </div>
       <ReactInputMask
         type={type}
         mask={masks[mask]}
@@ -27,7 +30,6 @@ export default function InputMask({
         className={styles.input}
         {...register}
       />
-      {errorMessage && <div>{errorMessage}</div>}
     </div>
   )
 }

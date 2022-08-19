@@ -18,6 +18,8 @@ const Buy = () => {
   const setFormState = useSetRecoilState(recoilFormState)
   const stateForm = useRecoilValue(recoilFormState)
 
+  console.log('product => ', product)
+
   console.log('stateForm', stateForm)
 
   const validationSchema = Yup.object().shape({

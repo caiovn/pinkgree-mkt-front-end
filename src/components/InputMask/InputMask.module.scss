@@ -11,3 +11,11 @@
   font-size: 16px;
   padding: 0 8px;
 }
+.errorMessage {
+  color:red;
+}
+.messageWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

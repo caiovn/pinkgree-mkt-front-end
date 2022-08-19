@@ -19,11 +19,18 @@ const Input = ({
   required,
   register,
   errorMessage,
+  placeholder,
+  width,
 }: InputProps) => {
 
   return (
-    <div className={styles.inputContainer}>
-      {label && <label className={styles.label}>{label}</label>}
+    <div className={styles.inputContainer} style={{width: width}}>
+      <div className={styles.MessageWrapper}>
+        {label && <label className={styles.label}>{label}</label>}
+        {errorMessage && (
+          <div className={styles.errorMessage}>{errorMessage}</div>
+        )}
+      </div>
       <input
         id={id}
         className={styles.input}
@@ -34,11 +41,10 @@ const Input = ({
         maxLength={maxLength}
         pattern={pattern}
         required={required}
+        placeholder={placeholder}
         {...register}
       />
-      {errorMessage && (
-        <div>{errorMessage}</div>
-      )}
+      
     </div>
   )
 }
