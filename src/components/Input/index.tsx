@@ -44,7 +44,7 @@ const Input = ({
         placeholder={placeholder}
         {...register}
       />
-      
+
     </div>
   )
 }

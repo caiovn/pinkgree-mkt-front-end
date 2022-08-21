@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import ProductCard from '@/components/ProductCard/ProductCard'
 import {
@@ -12,13 +13,21 @@ import { useForm, useWatch } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import InputMask from '@/components/InputMask'
+import { useRouter } from 'next/router'
 
 const Buy = () => {
+  const router = useRouter();
   const product = useRecoilValue(productState)
   const setFormState = useSetRecoilState(recoilFormState)
   const stateForm = useRecoilValue(recoilFormState)
 
-  console.log('product => ', product)
+  useEffect(() => {
+    if(!product) router.push('/');
+  }, [])
+
+  useEffect(() => {
+    if(stateForm.step === 1) router.push('/payment')
+  }, [stateForm]);
 
   console.log('stateForm', stateForm)
 
@@ -61,22 +70,28 @@ const Buy = () => {
         ...oldFormState,
         step: 1,
         values: {
-          name: data.name,
-          surname: data.surname,
-          cpf: data.cpf,
-          email: data.email,
-          telephone: data.telephone,
-          cep: data.cep,
-          street: data.street,
-          number: data.number,
-          neighborhood: data.neighborhood,
-          complement: data.complement,
-          city: data.city,
-          state: data.state,
+          ...oldFormState.values,
+          shipment: {
+            name: data.name,
+            surname: data.surname,
+            cpf: data.cpf,
+            email: data.email,
+            telephone: data.telephone,
+            address: {
+              cep: data.cep,
+              street: data.street,
+              number: data.number,
+              neighborhood: data.neighborhood,
+              complement: data.complement,
+              city: data.city,
+              state: data.state,
+            },
+          },
       },
     }
 
     })
+
     return false
   }
 
@@ -104,6 +119,10 @@ const Buy = () => {
     console.log('teste')
     cepOnBlur()
   }
+
+  console.log('eh tchau pra quem namora!! =>', product);
+
+  if(!product) return <></>;
 
   return (
     <>
