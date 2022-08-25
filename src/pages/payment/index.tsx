@@ -11,21 +11,25 @@ import InputMask from '@/components/InputMask'
 import Input from '@/components/Input'
 import { useRouter } from 'next/router'
 import RadioButton from '@/components/RadioButton'
-import style from "./payment.module.scss"
+import style from './payment.module.scss'
 
 const Payment = () => {
-  const router = useRouter();
+  const router = useRouter()
   const stateForm = useRecoilValue(recoilFormState)
   const setFormState = useSetRecoilState(recoilFormState)
   const product = useRecoilValue(productState)
-  const { address } = stateForm.values.shipment;
-  const formattedAddress = useMemo(() => `${address.street} ${address.number} ${address.neighborhood} ${address.city}, ${address.state} ${address.cep}`, [address]);
+  const { address } = stateForm.values.shipment
+  const formattedAddress = useMemo(
+    () =>
+      `${address.street} ${address.number} ${address.neighborhood} ${address.city}, ${address.state} ${address.cep}`,
+    [address]
+  )
 
-  console.log(stateForm);
+  console.log(stateForm)
 
   useEffect(() => {
-    if(stateForm.step === 0) router.push('/buy')
-  }, [stateForm]);
+    if (stateForm.step === 0) router.push('/buy')
+  }, [stateForm])
 
   const handleBack = () => {
     setFormState((oldFormState) => {
@@ -36,7 +40,6 @@ const Payment = () => {
           ...oldFormState.values,
         },
       }
-
     })
   }
 
@@ -44,7 +47,9 @@ const Payment = () => {
     <div>
       <div>
         <h2>Endereço:</h2>
-        <span>{stateForm.values.shipment.name} {stateForm.values.shipment.surname}</span>
+        <span>
+          {stateForm.values.shipment.name} {stateForm.values.shipment.surname}
+        </span>
         <br />
         <span>{formattedAddress}</span>
         <span></span>
@@ -56,30 +61,42 @@ const Payment = () => {
           <RadioButton label="Boleto" name="paymentForm" />
           <RadioButton label="Pix" name="paymentForm" />
         </div>
-        <h2>Dados do cartão de crédito:</h2>
-        <InputMask
-          mask="credit_card"
-          label="Numero do cartão"
-          type="tel"
-          // register={register('cpf')}
-        />
-        <Input
-          // register={register('name')}
-          label="Data de validade"
-          type="date"
-          // errorMessage={errors.name?.message}
-        />
-        <InputMask
-          // register={register('name')}
-          mask="cvv"
-          label="CVV"
-          type="tel"
-          // errorMessage={errors.name?.message}
-        />
+        <div>
+          <h2>Dados do cartão de crédito:</h2>
+          <InputMask
+            mask="credit_card"
+            label="Numero do cartão"
+            type="tel"
+            // register={register('cpf')}
+          />
+          <Input
+            // register={register('name')}
+            label="Nome do titular"
+            type="text"
+            // errorMessage={errors.name?.message}
+          />
+          <Input
+            // register={register('name')}
+            label="Data de validade"
+            type="date"
+            // errorMessage={errors.name?.message}
+          />
+          <InputMask
+            // register={register('name')}
+            mask="cvv"
+            label="CVV"
+            type="tel"
+            // errorMessage={errors.name?.message}
+          />
+          <div>
+            <input id="chkSameAddress" type="checkbox" />
+            <label htmlFor="chkSameAddress">Endereco de cobranca é o mesmo do endereco de entrega</label>
+          </div>
+        </div>
       </div>
       <div>
         <h2>Resumo do pedido:</h2>
-        <span style={{'fontSize': '16px'}}>Entrega estimada: 3 dias</span>
+        <span style={{ fontSize: '16px' }}>Entrega estimada: 3 dias</span>
         <ProductCard
           id={1}
           skuCode={product.skuCode}
@@ -90,10 +107,12 @@ const Payment = () => {
       </div>
       <div>
         <Button onClick={() => handleBack()}>Voltar</Button>
-        <Button color='green' type="submit">Concluir compra</Button>
+        <Button color="green" type="submit">
+          Finalizar compra
+        </Button>
       </div>
     </div>
   )
 }
 
-export default Payment;
+export default Payment
