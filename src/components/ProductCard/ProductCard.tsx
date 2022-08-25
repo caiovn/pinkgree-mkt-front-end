@@ -4,6 +4,7 @@ import ROUTES from '@/routes/routes'
 import { convertToBRLCurrency } from '@/utils/currency'
 import Link from 'next/link'
 import styles from './ProductCard.module.scss'
+import { IProduct } from 'src/types'
 
 const ProductCard = ({
   id,
@@ -17,16 +18,13 @@ const ProductCard = ({
     // <Link>
     <a href={`${ROUTES.PRODUCT_PAGE}/${id}/${skuCode}`}>
       <div className={styles.container}>
-        <div className={styles.imageWrapper}>
-          {mainImageUrl && (
-            <Image
-              src={`${mainImageUrl}`}
-              alt={name}
-              width="200"
-              height="200"
-            />
-          )}
-        </div>
+        {mainImageUrl && (
+          <img
+            className={styles.imageWrapper}
+            src={`${mainImageUrl}`}
+            alt={name}
+          />
+        )}
         <div className={styles.textWrapper}>
           <h2 className={styles.productName}>{name}</h2>
           <p className={styles.price}>{convertToBRLCurrency.format(price)}</p>

@@ -68,3 +68,5 @@ type Billing = {
     expDate: string,
   }
 } & Client
+
+type Mask = 'cpf' | 'cep' | 'telephone' | 'credit_card' | 'cvv'

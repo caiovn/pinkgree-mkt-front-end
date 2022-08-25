@@ -61,6 +61,8 @@ const Buy = () => {
     resolver: yupResolver(validationSchema),
   })
 
+  const cepValue = useWatch({ control, name: 'cep' })
+
   const { errors } = formState
 
   const onSubmit = (data) => {
@@ -95,8 +97,6 @@ const Buy = () => {
     return false
   }
 
-  const cepValue = useWatch({ control, name: 'cep' })
-
   const cepOnBlur = () => {
     fetch(`https://viacep.com.br/ws/${cepValue}/json/`)
       .then((resp) => resp.json())
@@ -109,7 +109,6 @@ const Buy = () => {
       })
       .catch((err) => {
         console.log(err)
-        alert('CEP inválido!')
       })
   }
 
