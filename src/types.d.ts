@@ -1,3 +1,5 @@
+import { type } from "os"
+
 type IBrand = {
   id: number
   name: string
@@ -8,10 +10,11 @@ interface ICategory extends IBrand {
 }
 
 interface IProduct {
-  active: boolean
-  brand: IBrand
-  categories: Array<ICategory>
+  active?: boolean
+  brand?: IBrand
+  categories?: Array<ICategory>
   id: number
+  skuCode?: string
   mainImageUrl: string
   name: string
   price: number
@@ -24,6 +27,7 @@ interface ISku {
   height: number
   width: number
   length: number
+  relatedSkus: Array<IProduct>
   weight: number
   mainImageUrl: string
   urlImages: Array<string>
@@ -35,3 +39,34 @@ interface ISku {
   }
   skuAttributes: Array<{ label: string; type: string; value: string }>
 }
+
+type Client = {
+  name: string,
+  surname: string,
+  cpf: string,
+  email: string,
+  telephone: string,
+  address: Address
+}
+
+type Address = {
+  cep: string,
+  street: string,
+  number: string,
+  neighborhood: string,
+  complement: string,
+  city: string,
+  state: string,
+}
+
+type Billing = {
+  paymentMethod: string,
+  creditCard: {
+    name: string,
+    number: string,
+    cvv: string,
+    expDate: string,
+  }
+} & Client
+
+type Mask = 'cpf' | 'cep' | 'telephone' | 'credit_card' | 'cvv'
