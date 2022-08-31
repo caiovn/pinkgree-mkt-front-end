@@ -8,7 +8,7 @@ class MyDocument extends Document {
           <script
             src="https://kit.fontawesome.com/707614de62.js"
             crossOrigin="anonymous"
-          />
+          ></script>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link
             rel="preconnect"

@@ -21,16 +21,6 @@ const Buy = () => {
   const setFormState = useSetRecoilState(recoilFormState)
   const stateForm = useRecoilValue(recoilFormState)
 
-  useEffect(() => {
-    if(!product) router.push('/');
-  }, [])
-
-  useEffect(() => {
-    if(stateForm.step === 1) router.push('/payment')
-  }, [stateForm]);
-
-  console.log('stateForm', stateForm)
-
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('nome é obrigatorio!'),
     surname: Yup.string().required('sobrenome é obrigatório!'),
@@ -65,8 +55,32 @@ const Buy = () => {
 
   const { errors } = formState
 
+  useEffect(() => {
+    if(!product) router.push('/');
+    if(stateForm?.values?.shipment) {
+      const { shipment } = stateForm?.values;
+      setValue("name", shipment.name)
+      setValue("cpf", shipment.cpf)
+      setValue("email", shipment.email)
+      setValue("surname", shipment.surname)
+      setValue("telephone", shipment.telephone)
+      setValue("cep", shipment.address.cep)
+      setValue("city", shipment.address.city)
+      setValue("complement", shipment.address.complement)
+      setValue("neighborhood", shipment.address.neighborhood)
+      setValue("number", shipment.address.number)
+      setValue("state", shipment.address.state)
+      setValue("street", shipment.address.street)
+    }
+  }, [])
+
+  useEffect(() => {
+    if(stateForm.step === 1) router.push('/payment')
+  }, [stateForm]);
+
+  console.log('stateForm ==> ', stateForm)
+
   const onSubmit = (data) => {
-    console.log('hold up =>', data)
     setFormState((oldFormState) => {
       return {
         ...oldFormState,
@@ -112,14 +126,9 @@ const Buy = () => {
       })
   }
 
-  console.log(cepValue)
-
   if (/^[0-9]{5}-[0-9]{3}$/.test(cepValue)) {
-    console.log('teste')
     cepOnBlur()
   }
-
-  console.log('eh tchau pra quem namora!! =>', product);
 
   if(!product) return <></>;
 
