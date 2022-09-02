@@ -119,6 +119,23 @@ const Payment = () => {
   }, [cepValue])
 
   useEffect(() => {
+    setValue('cardNumber', '')
+    setValue('titularName', '')
+    setValue('expDate', '')
+    setValue('cvv', '')
+  }, [paymentMethodValue])
+
+  useEffect(() => {
+    setValue('cep', '')
+    setValue('street', '')
+    setValue('number', '')
+    setValue('neighborhood', '')
+    setValue('complement', '')
+    setValue('city', '')
+    setValue('state', '')
+  }, [isDifferentAddress])
+
+  useEffect(() => {
     if (stateForm.step === 0) router.push('/buy')
   }, [stateForm])
 
