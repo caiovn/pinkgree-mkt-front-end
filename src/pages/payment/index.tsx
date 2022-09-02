@@ -1,6 +1,5 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import {
-  productState,
   formState as recoilFormState,
 } from '@/components/States/Atoms'
 import * as Yup from 'yup'
@@ -20,8 +19,9 @@ const Payment = () => {
   const router = useRouter()
   const stateForm = useRecoilValue(recoilFormState)
   const setFormState = useSetRecoilState(recoilFormState)
-  const product = useRecoilValue(productState)
+  const { product } = stateForm.values
   const { address } = stateForm.values.shipment
+
   const formattedAddress = useMemo(
     () =>
       `${address.street} ${address.number} ${address.neighborhood} ${address.city}, ${address.state} ${address.cep}`,
@@ -29,7 +29,7 @@ const Payment = () => {
   )
 
   const validationSchema = Yup.object().shape({
-    paymentMethod: Yup.string().required('Forma de pagamento é obrigatório!'),
+    paymentMethod: Yup.string().required('Forma de pagamento é obrigatório!').nullable(),
     cardNumber: Yup.string().when('paymentMethod', {
       is: 'boleto',
       then: Yup.string(),

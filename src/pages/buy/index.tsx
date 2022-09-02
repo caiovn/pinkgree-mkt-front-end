@@ -1,10 +1,7 @@
 import { useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import ProductCard from '@/components/ProductCard/ProductCard'
-import {
-  productState,
-  formState as recoilFormState,
-} from '@/components/States/Atoms'
+import { formState as recoilFormState } from '@/components/States/Atoms'
 import style from './buy.module.scss'
 import Input from '@/components/Input'
 import Button from '@/components/Button'
@@ -17,9 +14,9 @@ import { useRouter } from 'next/router'
 
 const Buy = () => {
   const router = useRouter()
-  const product = useRecoilValue(productState)
   const setFormState = useSetRecoilState(recoilFormState)
   const stateForm = useRecoilValue(recoilFormState)
+  const { product } = stateForm.values
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('nome é obrigatorio!'),

@@ -1,20 +1,32 @@
 import { atom, selector } from 'recoil'
 import { recoilPersist } from 'recoil-persist'
-import { Billing, Client } from 'src/types'
+import { Billing, Client, IProduct } from 'src/types'
 
 const { persistAtom } = recoilPersist()
 
-const productState = atom({
-  key: 'productState',
-  default: '',
-  effects_UNSTABLE: [persistAtom],
-})
+export interface IFormState {
+  step?: number
+  values: { product: IProduct; shipment: Client; billing: Billing }
+}
 
-const formState = atom<{step?: number, values: {shipment: Client, billing: Billing}}>({
+const formState = atom<IFormState>({
   key: 'formState',
   default: {
     step: null,
     values: {
+      product: {
+        active: true,
+        brand: {
+          id: null,
+          name: '',
+        },
+        categories: [],
+        id: null,
+        skuCode: '',
+        mainImageUrl: '',
+        name: '',
+        price: null,
+      },
       shipment: {
         name: '',
         surname: '',
@@ -59,4 +71,4 @@ const formState = atom<{step?: number, values: {shipment: Client, billing: Billi
   effects_UNSTABLE: [persistAtom],
 })
 
-export { productState, formState }
+export { formState }
