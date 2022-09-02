@@ -1,5 +1,5 @@
 import React from 'react'
-import style from './RadioGroup.module.scss'
+import style from './Checkbox.module.scss'
 
 interface CheckboxProps {
   label: string
@@ -9,14 +9,10 @@ interface CheckboxProps {
 const Checkbox = ({ label, register }: CheckboxProps) => {
   return (
     <div>
-      <div>
-        <input
-          type="checkbox"
-          id={`radio-btn`}
-          {...register}
-        />
-        <label htmlFor={`radio-btn`}>{label}</label>
-      </div>
+      <input type="checkbox" id={`radio-btn`} {...register} />
+      <label htmlFor={`radio-btn`}>
+        {label}
+      </label>
     </div>
   )
 }

@@ -16,7 +16,7 @@ import InputMask from '@/components/InputMask'
 import { useRouter } from 'next/router'
 
 const Buy = () => {
-  const router = useRouter();
+  const router = useRouter()
   const product = useRecoilValue(productState)
   const setFormState = useSetRecoilState(recoilFormState)
   const stateForm = useRecoilValue(recoilFormState)
@@ -56,29 +56,27 @@ const Buy = () => {
   const { errors } = formState
 
   useEffect(() => {
-    if(!product) router.push('/');
-    if(stateForm?.values?.shipment) {
-      const { shipment } = stateForm?.values;
-      setValue("name", shipment.name)
-      setValue("cpf", shipment.cpf)
-      setValue("email", shipment.email)
-      setValue("surname", shipment.surname)
-      setValue("telephone", shipment.telephone)
-      setValue("cep", shipment.address.cep)
-      setValue("city", shipment.address.city)
-      setValue("complement", shipment.address.complement)
-      setValue("neighborhood", shipment.address.neighborhood)
-      setValue("number", shipment.address.number)
-      setValue("state", shipment.address.state)
-      setValue("street", shipment.address.street)
+    if (!product) router.push('/')
+    if (stateForm?.values?.shipment) {
+      const { shipment } = stateForm?.values
+      setValue('name', shipment.name)
+      setValue('cpf', shipment.cpf)
+      setValue('email', shipment.email)
+      setValue('surname', shipment.surname)
+      setValue('telephone', shipment.telephone)
+      setValue('cep', shipment.address.cep)
+      setValue('city', shipment.address.city)
+      setValue('complement', shipment.address.complement)
+      setValue('neighborhood', shipment.address.neighborhood)
+      setValue('number', shipment.address.number)
+      setValue('state', shipment.address.state)
+      setValue('street', shipment.address.street)
     }
   }, [])
 
   useEffect(() => {
-    if(stateForm.step === 1) router.push('/payment')
-  }, [stateForm]);
-
-  console.log('stateForm ==> ', stateForm)
+    if (stateForm.step === 1) router.push('/payment')
+  }, [stateForm])
 
   const onSubmit = (data) => {
     setFormState((oldFormState) => {
@@ -103,9 +101,8 @@ const Buy = () => {
               state: data.state,
             },
           },
-      },
-    }
-
+        },
+      }
     })
 
     return false
@@ -115,22 +112,24 @@ const Buy = () => {
     fetch(`https://viacep.com.br/ws/${cepValue}/json/`)
       .then((resp) => resp.json())
       .then((data) => {
-        setValue('street', data.logradouro)
-        setValue('neighborhood', data.bairro)
-        setValue('city', data.localidade)
-        setValue('state', data.uf)
-        setValue('complement', data.complemento)
+        setValue('street', data.logradouro, { shouldValidate: true })
+        setValue('neighborhood', data.bairro, { shouldValidate: true })
+        setValue('city', data.localidade, { shouldValidate: true })
+        setValue('state', data.uf, { shouldValidate: true })
+        setValue('complement', data.complemento, { shouldValidate: true })
       })
       .catch((err) => {
         console.log(err)
       })
   }
 
-  if (/^[0-9]{5}-[0-9]{3}$/.test(cepValue)) {
-    cepOnBlur()
-  }
+  useEffect(() => {
+    if (/^[0-9]{5}-[0-9]{3}$/.test(cepValue)) {
+      cepOnBlur()
+    }
+  }, [cepValue])
 
-  if(!product) return <></>;
+  if (!product) return <></>
 
   return (
     <>

@@ -13,7 +13,6 @@ const ProductCard = ({
   price,
   mainImageUrl,
 }: IProduct) => {
-  console.log(mainImageUrl)
   return (
     // <Link>
     <a href={`${ROUTES.PRODUCT_PAGE}/${id}/${skuCode}`}>

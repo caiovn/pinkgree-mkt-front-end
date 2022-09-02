@@ -1,7 +1,6 @@
 .radioButtonGroup {
   display: flex;
   flex-direction: column;
-  gap: 16px;
 
   h2 {
     margin-bottom: 0;
@@ -20,4 +19,7 @@
   p {
     width: 70%;
   }
+}
+.addressWrapper {
+  margin: 16px 0;
 }

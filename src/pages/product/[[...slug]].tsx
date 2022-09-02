@@ -27,7 +27,6 @@ const ProductPage = () => {
   const productMain = skuCode ? product : product[0]
   const otherProducts = skuCode ? product.relatedSkus : product.slice(1)
 
-  console.log('aqui', getProduct)
 
   const handleClickBuy = () => {
     setProduct(productMain)
@@ -37,8 +36,6 @@ const ProductPage = () => {
         step: 0
       }
     })
-    console.log('formState', getFormState);
-    console.log(getProduct)
     router.push('/buy')
   }
 

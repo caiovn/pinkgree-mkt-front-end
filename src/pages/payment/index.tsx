@@ -30,13 +30,61 @@ const Payment = () => {
 
   const validationSchema = Yup.object().shape({
     paymentMethod: Yup.string().required('Forma de pagamento é obrigatório!'),
-    cardNumber: Yup.string()
-      .required('Numero do cartão é obrigatório!')
-      .matches(/^4[0-9]{12}(?:[0-9]{3})?$/, 'cartão de credito inválido!'),
-    titularName: Yup.string().required('Nome do titular é obrigatório!'),
-    validDate: Yup.string().required('data de validade é obrigatório!'),
-    cvv: Yup.string().required('CVV é obrigatorio!'),
-    sameAdress: Yup.bool(),
+    cardNumber: Yup.string().when('paymentMethod', {
+      is: 'boleto',
+      then: Yup.string(),
+      otherwise: Yup.string().required('Numero do cartão é obrigatório!'),
+      // .matches(/^4[0-9]{12}(?:[0-9]{3})?$/, 'cartão de credito inválido!'),
+    }),
+    titularName: Yup.string().when('paymentMethod', {
+      is: 'boleto',
+      then: Yup.string(),
+      otherwise: Yup.string().required('Nome do titular é obrigatório!'),
+    }),
+    expDate: Yup.string().when('paymentMethod', {
+      is: 'boleto',
+      then: Yup.string(),
+      otherwise: Yup.string().required('data de validade é obrigatório!'),
+    }),
+    cvv: Yup.string().when('paymentMethod', {
+      is: 'boleto',
+      then: Yup.string(),
+      otherwise: Yup.string().required('CVV é obrigatorio!'),
+    }),
+    differentAddress: Yup.boolean(),
+    cep: Yup.string().when('differentAddress', {
+      is: true,
+      then: Yup.string()
+        .required('CEP é obrigatorio!')
+        .matches(/^[0-9]{5}-[0-9]{3}$/, 'CEP inválido!'),
+      otherwise: Yup.string(),
+    }),
+    street: Yup.string().when('differentAddress', {
+      is: true,
+      then: Yup.string().required('rua é obrigatorio!'),
+      otherwise: Yup.string(),
+    }),
+    number: Yup.string().when('differentAddress', {
+      is: true,
+      then: Yup.string().required('numero é obrigatorio!'),
+      otherwise: Yup.string(),
+    }),
+    neighborhood: Yup.string().when('differentAddress', {
+      is: true,
+      then: Yup.string().required('bairro é obrigatorio!'),
+      otherwise: Yup.string(),
+    }),
+    complement: Yup.string(),
+    city: Yup.string().when('differentAddress', {
+      is: true,
+      then: Yup.string().required('cidade é obrigatorio!'),
+      otherwise: Yup.string(),
+    }),
+    state: Yup.string().when('differentAddress', {
+      is: true,
+      then: Yup.string().required('estado é obrigatorio!'),
+      otherwise: Yup.string(),
+    }),
   })
 
   const { register, handleSubmit, formState, control, setValue } = useForm({
@@ -46,9 +94,29 @@ const Payment = () => {
   const { errors } = formState
 
   const paymentMethodValue = useWatch({ control, name: 'paymentMethod' })
+  const cepValue = useWatch({ control, name: 'cep' })
+  const isDifferentAddress = useWatch({ control, name: 'differentAddress' })
 
-  console.log(paymentMethodValue)
-  console.log(formState.errors)
+  const cepOnBlur = () => {
+    fetch(`https://viacep.com.br/ws/${cepValue}/json/`)
+      .then((resp) => resp.json())
+      .then((data) => {
+        setValue('street', data.logradouro, { shouldValidate: true })
+        setValue('neighborhood', data.bairro, { shouldValidate: true })
+        setValue('city', data.localidade, { shouldValidate: true })
+        setValue('state', data.uf, { shouldValidate: true })
+        setValue('complement', data.complemento, { shouldValidate: true })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  useEffect(() => {
+    if (/^[0-9]{5}-[0-9]{3}$/.test(cepValue)) {
+      cepOnBlur()
+    }
+  }, [cepValue])
 
   useEffect(() => {
     if (stateForm.step === 0) router.push('/buy')
@@ -67,6 +135,37 @@ const Payment = () => {
   }
 
   const onSubmit = (data) => {
+    setFormState((oldFormState) => {
+      return {
+        ...oldFormState,
+        step: 2,
+        values: {
+          ...oldFormState.values,
+          billing: {
+            ...oldFormState.values.billing,
+            paymentMethod: data.paymentMethod,
+            creditCard: {
+              ...oldFormState.values.billing.creditCard,
+              name: data.titularName,
+              number: data.cardNumber,
+              cvv: data.cvv,
+              expDate: data.expDate,
+            },
+            address: {
+              ...oldFormState.values.billing.address,
+              cep: data.cep,
+              street: data.street,
+              number: data.number,
+              neighborhood: data.neighborhood,
+              complement: data.complement,
+              city: data.city,
+              state: data.state,
+            },
+          },
+        },
+      }
+    })
+
     return false
   }
 
@@ -98,7 +197,7 @@ const Payment = () => {
           {(paymentMethodValue === 'credit_card' ||
             paymentMethodValue === 'debit_card') && (
             <div className="card-fields">
-              <h2>Dados do cartão de crédito:</h2>
+              <h2>Dados do cartão:</h2>
               <InputMask
                 register={register('cardNumber')}
                 mask="credit_card"
@@ -113,10 +212,10 @@ const Payment = () => {
                 errorMessage={errors.titularName?.message}
               />
               <Input
-                register={register('validDate')}
+                register={register('expDate')}
                 label="Data de validade"
                 type="date"
-                errorMessage={errors.validDate?.message}
+                errorMessage={errors.expDate?.message}
               />
               <InputMask
                 register={register('cvv')}
@@ -125,24 +224,77 @@ const Payment = () => {
                 type="tel"
                 errorMessage={errors.cvv?.message}
               />
-              <div>
-                <Checkbox
-                  label="Endereco de cobranca é o mesmo do endereco de entrega"
-                  register={register('sameAdress')}
-                />
-              </div>
             </div>
           )}
           {paymentMethodValue === 'boleto' && (
             <div className={style.boletoWrapper}>
               <i className="fa-solid fa-triangle-exclamation"></i>
-              <p>Vencimento em 3 dias. A data de entrega será alterada devido ao tempo de compensação do boleto.</p>
+              <p>
+                Vencimento em 3 dias. A data de entrega será alterada devido ao
+                tempo de compensação do boleto.
+              </p>
+            </div>
+          )}
+        </div>
+        <div className={style.addressWrapper}>
+          <Checkbox
+            label="Endereco de cobranca é diferente do endereco de entrega"
+            register={register('differentAddress')}
+          />
+          {isDifferentAddress && (
+            <div>
+              <h3>Endereço de cobrança:</h3>
+              <InputMask
+                mask="cep"
+                label="CEP"
+                type="tel"
+                errorMessage={errors.cep?.message}
+                register={register('cep')}
+              />
+              <Input
+                register={register('street')}
+                label="Rua"
+                type="text"
+                errorMessage={errors.street?.message}
+              />
+              <Input
+                register={register('number')}
+                label="Número"
+                type="text"
+                errorMessage={errors.number?.message}
+              />
+              <Input
+                register={register('neighborhood')}
+                label="Bairro"
+                type="text"
+                errorMessage={errors.neighborhood?.message}
+              />
+              <Input
+                register={register('complement')}
+                label="Complemento"
+                type="text"
+              />
+              <Input
+                register={register('city')}
+                label="Cidade"
+                type="text"
+                errorMessage={errors.city?.message}
+              />
+              <Input
+                register={register('state')}
+                maxLength={2}
+                label="Estado"
+                type="text"
+                errorMessage={errors.state?.message}
+              />
             </div>
           )}
         </div>
         <div>
           <h2>Resumo do pedido:</h2>
-          <span style={{ fontSize: '16px' }}>Entrega estimada: 3 dias após a confirmação do pagamento</span>
+          <span style={{ fontSize: '16px' }}>
+            Entrega estimada: 3 dias após a confirmação do pagamento
+          </span>
           <ProductCard
             id={1}
             skuCode={product.skuCode}
