@@ -36,6 +36,7 @@ const ProductPage = () => {
         }
       }
     })
+
     router.push('/buy')
   }
 

@@ -34,7 +34,7 @@ const formState = atom<IFormState>({
         email: '',
         telephone: '',
         address: {
-          cep: '',
+          zipCode: '',
           street: '',
           number: '',
           neighborhood: '',
@@ -44,13 +44,8 @@ const formState = atom<IFormState>({
         },
       },
       billing: {
-        name: '',
-        surname: '',
-        cpf: '',
-        email: '',
-        telephone: '',
         address: {
-          cep: '',
+          zipCode: '',
           street: '',
           number: '',
           neighborhood: '',

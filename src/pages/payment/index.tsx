@@ -24,7 +24,7 @@ const Payment = () => {
 
   const formattedAddress = useMemo(
     () =>
-      `${address.street} ${address.number} ${address.neighborhood} ${address.city}, ${address.state} ${address.cep}`,
+      `${address.street} ${address.number} ${address.neighborhood} ${address.city}, ${address.state} ${address.zipCode}`,
     [address]
   )
 
@@ -52,7 +52,7 @@ const Payment = () => {
       otherwise: Yup.string().required('CVV é obrigatorio!'),
     }),
     differentAddress: Yup.boolean(),
-    cep: Yup.string().when('differentAddress', {
+    zipCode: Yup.string().when('differentAddress', {
       is: true,
       then: Yup.string()
         .required('CEP é obrigatorio!')
@@ -94,11 +94,11 @@ const Payment = () => {
   const { errors } = formState
 
   const paymentMethodValue = useWatch({ control, name: 'paymentMethod' })
-  const cepValue = useWatch({ control, name: 'cep' })
+  const zipCodeValue = useWatch({ control, name: 'zipCode' })
   const isDifferentAddress = useWatch({ control, name: 'differentAddress' })
 
-  const cepOnBlur = () => {
-    fetch(`https://viacep.com.br/ws/${cepValue}/json/`)
+  const zipCodeOnBlur = () => {
+    fetch(`https://viacep.com.br/ws/${zipCodeValue}/json/`)
       .then((resp) => resp.json())
       .then((data) => {
         setValue('street', data.logradouro, { shouldValidate: true })
@@ -113,10 +113,10 @@ const Payment = () => {
   }
 
   useEffect(() => {
-    if (/^[0-9]{5}-[0-9]{3}$/.test(cepValue)) {
-      cepOnBlur()
+    if (/^[0-9]{5}-[0-9]{3}$/.test(zipCodeValue)) {
+      zipCodeOnBlur()
     }
-  }, [cepValue])
+  }, [zipCodeValue])
 
   useEffect(() => {
     setValue('cardNumber', '')
@@ -126,7 +126,7 @@ const Payment = () => {
   }, [paymentMethodValue])
 
   useEffect(() => {
-    setValue('cep', '')
+    setValue('zipCode', '')
     setValue('street', '')
     setValue('number', '')
     setValue('neighborhood', '')
@@ -170,7 +170,7 @@ const Payment = () => {
             },
             address: {
               ...oldFormState.values.billing.address,
-              cep: data.cep,
+              zipCode: data.zipCode,
               street: data.street,
               number: data.number,
               neighborhood: data.neighborhood,
@@ -262,11 +262,11 @@ const Payment = () => {
             <div>
               <h3>Endereço de cobrança:</h3>
               <InputMask
-                mask="cep"
+                mask="zipCode"
                 label="CEP"
                 type="tel"
-                errorMessage={errors.cep?.message}
-                register={register('cep')}
+                errorMessage={errors.zipCode?.message}
+                register={register('zipCode')}
               />
               <Input
                 register={register('street')}

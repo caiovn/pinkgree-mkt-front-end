@@ -33,7 +33,7 @@ const Buy = () => {
     cpf: Yup.string()
       .required('cpf é obrigatorio!')
       .matches(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/, 'CPF inválido!'),
-    cep: Yup.string()
+    zipCode: Yup.string()
       .required('CEP é obrigatorio!')
       .matches(/^[0-9]{5}-[0-9]{3}$/, 'CEP inválido!'),
     street: Yup.string().required('rua é obrigatorio!'),
@@ -48,7 +48,7 @@ const Buy = () => {
     resolver: yupResolver(validationSchema),
   })
 
-  const cepValue = useWatch({ control, name: 'cep' })
+  const zipCodeValue = useWatch({ control, name: 'zipCode' })
 
   const { errors } = formState
 
@@ -61,7 +61,7 @@ const Buy = () => {
       setValue('email', shipment.email)
       setValue('surname', shipment.surname)
       setValue('telephone', shipment.telephone)
-      setValue('cep', shipment.address.cep)
+      setValue('zipCode', shipment.address.zipCode)
       setValue('city', shipment.address.city)
       setValue('complement', shipment.address.complement)
       setValue('neighborhood', shipment.address.neighborhood)
@@ -89,7 +89,7 @@ const Buy = () => {
             email: data.email,
             telephone: data.telephone,
             address: {
-              cep: data.cep,
+              zipCode: data.zipCode,
               street: data.street,
               number: data.number,
               neighborhood: data.neighborhood,
@@ -105,8 +105,8 @@ const Buy = () => {
     return false
   }
 
-  const cepOnBlur = () => {
-    fetch(`https://viacep.com.br/ws/${cepValue}/json/`)
+  const zipCodeOnBlur = () => {
+    fetch(`https://viacep.com.br/ws/${zipCodeValue}/json/`)
       .then((resp) => resp.json())
       .then((data) => {
         setValue('street', data.logradouro, { shouldValidate: true })
@@ -121,10 +121,10 @@ const Buy = () => {
   }
 
   useEffect(() => {
-    if (/^[0-9]{5}-[0-9]{3}$/.test(cepValue)) {
-      cepOnBlur()
+    if (/^[0-9]{5}-[0-9]{3}$/.test(zipCodeValue)) {
+      zipCodeOnBlur()
     }
-  }, [cepValue])
+  }, [zipCodeValue])
 
   if (!product) return <></>
 
@@ -178,11 +178,11 @@ const Buy = () => {
         <div className={style.inputContainer}>
           <h3>Dados da entrega</h3>
           <InputMask
-            mask="cep"
+            mask="zipCode"
             label="CEP"
             type="tel"
-            errorMessage={errors.cep?.message}
-            register={register('cep')}
+            errorMessage={errors.zipCode?.message}
+            register={register('zipCode')}
           />
           <Input
             register={register('street')}

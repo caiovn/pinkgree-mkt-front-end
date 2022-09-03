@@ -50,7 +50,7 @@ type Client = {
 }
 
 type Address = {
-  cep: string,
+  zipCode: string,
   street: string,
   number: string,
   neighborhood: string,
@@ -66,7 +66,14 @@ type Billing = {
     number: string,
     cvv: string,
     expDate: string,
-  }
-} & Client
+  },
+  address: Address
+}
 
-type Mask = 'cpf' | 'cep' | 'telephone' | 'credit_card' | 'cvv'
+type ShippingData = {
+  freightPrice: number,
+  deliveryDays: number,
+  address: Address,
+}
+
+type Mask = 'cpf' | 'zipCode' | 'telephone' | 'credit_card' | 'cvv'
