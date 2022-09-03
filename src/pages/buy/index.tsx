@@ -16,7 +16,7 @@ const Buy = () => {
   const router = useRouter()
   const setFormState = useSetRecoilState(recoilFormState)
   const stateForm = useRecoilValue(recoilFormState)
-  const { product } = stateForm.values
+  const { productList } = stateForm.values
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('nome é obrigatorio!'),
@@ -53,21 +53,21 @@ const Buy = () => {
   const { errors } = formState
 
   useEffect(() => {
-    if (!product) router.push('/')
-    if (stateForm?.values?.shipment) {
-      const { shipment } = stateForm?.values
-      setValue('name', shipment.name)
-      setValue('cpf', shipment.cpf)
-      setValue('email', shipment.email)
-      setValue('surname', shipment.surname)
-      setValue('telephone', shipment.telephone)
-      setValue('zipCode', shipment.address.zipCode)
-      setValue('city', shipment.address.city)
-      setValue('complement', shipment.address.complement)
-      setValue('neighborhood', shipment.address.neighborhood)
-      setValue('number', shipment.address.number)
-      setValue('state', shipment.address.state)
-      setValue('street', shipment.address.street)
+    if (!productList[0]) router.push('/')
+    if (stateForm.values?.customerData && stateForm.values?.shippingData) {
+      const { customerData, shippingData } = stateForm.values
+      setValue('name', customerData.name)
+      setValue('cpf', customerData.document)
+      setValue('email', customerData.email)
+      setValue('surname', customerData.lastName)
+      setValue('telephone', customerData.phone)
+      setValue('zipCode', shippingData.address.zipCode)
+      setValue('city', shippingData.address.city)
+      setValue('complement', shippingData.address.complement)
+      setValue('neighborhood', shippingData.address.neighborhood)
+      setValue('number', shippingData.address.number)
+      setValue('state', shippingData.address.state)
+      setValue('street', shippingData.address.street)
     }
   }, [])
 
@@ -82,21 +82,27 @@ const Buy = () => {
         step: 1,
         values: {
           ...oldFormState.values,
-          shipment: {
-            name: data.name,
-            surname: data.surname,
-            cpf: data.cpf,
+          customerData: {
+            ...oldFormState.values.customerData,
+            document: data.cpf,
             email: data.email,
-            telephone: data.telephone,
+            lastName: data.surname,
+            name: data.name,
+            phone: data.telephone,
+          },
+          shippingData: {
+            ...oldFormState.values.shippingData,
             address: {
-              zipCode: data.zipCode,
-              street: data.street,
-              number: data.number,
-              neighborhood: data.neighborhood,
-              complement: data.complement,
+              ...oldFormState.values.shippingData.address,
               city: data.city,
+              complement: data.complement,
+              neighborhood: data.neighborhood,
+              number: data.number,
+              phone: data.telephone,
               state: data.state,
-            },
+              street: data.street,
+              zipCode: data.zipCode,
+            }
           },
         },
       }
@@ -126,7 +132,7 @@ const Buy = () => {
     }
   }, [zipCodeValue])
 
-  if (!product) return <></>
+  if (!productList[0]) return <></>
 
   return (
     <>
@@ -134,10 +140,10 @@ const Buy = () => {
       <h3>item a ser comprado.</h3>
       <ProductCard
         id={1}
-        skuCode={product.skuCode}
-        name={product.name}
-        price={product.price?.listPrice}
-        mainImageUrl={product.mainImageUrl}
+        skuCode={productList[0].skuCode}
+        name={productList[0].name}
+        price={productList[0].price?.listPrice}
+        mainImageUrl={productList[0].image}
       />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={style.inputContainer}>

@@ -50,6 +50,7 @@ type Client = {
 }
 
 type Address = {
+  country: string,
   zipCode: string,
   street: string,
   number: string,
@@ -57,6 +58,7 @@ type Address = {
   complement: string,
   city: string,
   state: string,
+  phone: string,
 }
 
 type Billing = {
@@ -70,10 +72,50 @@ type Billing = {
   address: Address
 }
 
+type CustomerData = {
+  id: string,
+  document: string,
+  name: string,
+  lastName: string,
+  email: string,
+  phone: string,
+}
+
 type ShippingData = {
   freightPrice: number,
   deliveryDays: number,
   address: Address,
+}
+
+type ProductList = [
+  {
+    name: string,
+    price: {
+      listPrice: number,
+      salePrice: number,
+      startDate: string,
+      endDate: string,
+    }
+    stockQuantity: number,
+    skuCode: string,
+    quantity: number,
+    image: string,
+  },
+]
+
+type PaymentData = {
+  paymentMethod: string,
+  paymentMethodProperties: {
+    cardNumber?: string,
+    cvv?: string,
+    validationDate?: string,
+    document: string,
+    ownerName: string,
+    birthday?: string,
+    phone: string,
+    email: string,
+  }
+  paymentAddress: Address,
 }
 
 type Mask = 'cpf' | 'zipCode' | 'telephone' | 'credit_card' | 'cvv'

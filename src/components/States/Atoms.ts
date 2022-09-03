@@ -1,12 +1,22 @@
-import { atom, selector } from 'recoil'
+import { atom } from 'recoil'
 import { recoilPersist } from 'recoil-persist'
-import { Billing, Client, IProduct } from 'src/types'
+import {
+  CustomerData,
+  PaymentData,
+  ProductList,
+  ShippingData,
+} from 'src/types'
 
 const { persistAtom } = recoilPersist()
 
 export interface IFormState {
   step?: number
-  values: { product: IProduct; shipment: Client; billing: Billing }
+  values: {
+    customerData: CustomerData
+    shippingData: ShippingData
+    productList: ProductList
+    paymentData: PaymentData
+  }
 }
 
 const formState = atom<IFormState>({
@@ -14,51 +24,66 @@ const formState = atom<IFormState>({
   default: {
     step: null,
     values: {
-      product: {
-        active: true,
-        brand: {
-          id: null,
-          name: '',
-        },
-        categories: [],
-        id: null,
-        skuCode: '',
-        mainImageUrl: '',
+      customerData: {
+        id: '6034f9a9-6337-40ca-8bac-cf92cc597799',
+        document: '',
         name: '',
-        price: null,
-      },
-      shipment: {
-        name: '',
-        surname: '',
-        cpf: '',
+        lastName: '',
         email: '',
-        telephone: '',
+        phone: '',
+      },
+      shippingData: {
+        freightPrice: 9.9,
+        deliveryDays: 3,
         address: {
-          zipCode: '',
+          country: 'Brasil',
+          state: '',
+          city: '',
+          neighborhood: '',
           street: '',
           number: '',
-          neighborhood: '',
+          zipCode: '',
           complement: '',
-          city: '',
-          state: '',
+          phone: '',
         },
       },
-      billing: {
-        address: {
-          zipCode: '',
+      productList: [
+        {
+          name: '',
+          price: {
+            listPrice: null,
+            salePrice: null,
+            startDate: '',
+            endDate: '',
+          },
+          stockQuantity: null,
+          skuCode: '',
+          quantity: 1,
+          image: '',
+        },
+      ],
+      paymentData: {
+        paymentMethod: '',
+        paymentMethodProperties: {
+          cardNumber: '',
+          cvv: '',
+          validationDate: '',
+          document: '',
+          ownerName: '',
+          birthday: '',
+          phone: '',
+          email: '',
+        },
+        paymentAddress: {
+          country: 'Brasil',
+          state: '',
+          city: '',
+          neighborhood: '',
           street: '',
           number: '',
-          neighborhood: '',
+          zipCode: '',
           complement: '',
-          city: '',
-          state: '',
-        },
-        paymentMethod: '',
-        creditCard: {
-          name: '',
-          number: '',
-          cvv: '',
-          expDate: '',
+          phone: '',
         },
       },
     },

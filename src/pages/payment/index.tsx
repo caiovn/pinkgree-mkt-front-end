@@ -1,7 +1,5 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  formState as recoilFormState,
-} from '@/components/States/Atoms'
+import { formState as recoilFormState } from '@/components/States/Atoms'
 import * as Yup from 'yup'
 import { useEffect, useMemo } from 'react'
 import ProductCard from '@/components/ProductCard/ProductCard'
@@ -19,17 +17,19 @@ const Payment = () => {
   const router = useRouter()
   const stateForm = useRecoilValue(recoilFormState)
   const setFormState = useSetRecoilState(recoilFormState)
-  const { product } = stateForm.values
-  const { address } = stateForm.values.shipment
+  const { productList } = stateForm.values
+  const { address } = stateForm.values.shippingData
 
   const formattedAddress = useMemo(
     () =>
-      `${address.street} ${address.number} ${address.neighborhood} ${address.city}, ${address.state} ${address.zipCode}`,
+      `${address.street} ${address.number} ${address.neighborhood} ${address.city}, ${address.state} ${address.zipCode} - ${address.country}`,
     [address]
   )
 
   const validationSchema = Yup.object().shape({
-    paymentMethod: Yup.string().required('Forma de pagamento é obrigatório!').nullable(),
+    paymentMethod: Yup.string()
+      .required('Forma de pagamento é obrigatório!')
+      .nullable(),
     cardNumber: Yup.string().when('paymentMethod', {
       is: 'boleto',
       then: Yup.string(),
@@ -50,6 +50,13 @@ const Payment = () => {
       is: 'boleto',
       then: Yup.string(),
       otherwise: Yup.string().required('CVV é obrigatorio!'),
+    }),
+    cpf: Yup.string().when('paymentMethod', {
+      is: 'boleto',
+      then: Yup.string(),
+      otherwise: Yup.string()
+        .required('cpf é obrigatorio!')
+        .matches(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/, 'CPF inválido!'),
     }),
     differentAddress: Yup.boolean(),
     zipCode: Yup.string().when('differentAddress', {
@@ -158,25 +165,50 @@ const Payment = () => {
         step: 2,
         values: {
           ...oldFormState.values,
-          billing: {
-            ...oldFormState.values.billing,
+          paymentData: {
+            ...oldFormState.values.paymentData,
             paymentMethod: data.paymentMethod,
-            creditCard: {
-              ...oldFormState.values.billing.creditCard,
-              name: data.titularName,
-              number: data.cardNumber,
+            paymentMethodProperties: {
+              ...oldFormState.values.paymentData.paymentMethodProperties,
+              cardNumber: data.cardNumber,
+              ownerName:
+                paymentMethodValue === 'boleto'
+                  ? `${stateForm.values.customerData.name} ${stateForm.values.customerData.lastName}`
+                  : data.titularName,
               cvv: data.cvv,
-              expDate: data.expDate,
+              validationDate: data.expDate,
+              document:
+                paymentMethodValue === 'boleto'
+                  ? stateForm.values.customerData.document
+                  : data.cpf,
+              birthday: '2002/08/11',
+              phone: stateForm.values.customerData.phone,
+              email: stateForm.values.customerData.email,
             },
-            address: {
-              ...oldFormState.values.billing.address,
-              zipCode: data.zipCode,
-              street: data.street,
-              number: data.number,
-              neighborhood: data.neighborhood,
-              complement: data.complement,
-              city: data.city,
-              state: data.state,
+            paymentAddress: {
+              ...oldFormState.values.paymentData.paymentAddress,
+              zipCode: isDifferentAddress
+                ? data.zipCode
+                : stateForm.values.shippingData.address.zipCode,
+              street: isDifferentAddress
+                ? data.street
+                : stateForm.values.shippingData.address.street,
+              number: isDifferentAddress
+                ? data.number
+                : stateForm.values.shippingData.address.number,
+              neighborhood: isDifferentAddress
+                ? data.neighborhood
+                : stateForm.values.shippingData.address.neighborhood,
+              complement: isDifferentAddress
+                ? data.complement
+                : stateForm.values.shippingData.address.complement,
+              city: isDifferentAddress
+                ? data.city
+                : stateForm.values.shippingData.address.city,
+              state: isDifferentAddress
+                ? data.state
+                : stateForm.values.shippingData.address.state,
+              phone: stateForm.values.customerData.phone,
             },
           },
         },
@@ -192,7 +224,8 @@ const Payment = () => {
         <div>
           <h2>Endereço:</h2>
           <span>
-            {stateForm.values.shipment.name} {stateForm.values.shipment.surname}
+            {stateForm.values.customerData.name}{' '}
+            {stateForm.values.customerData.lastName}
           </span>
           <br />
           <span>{formattedAddress}</span>
@@ -231,7 +264,7 @@ const Payment = () => {
               <Input
                 register={register('expDate')}
                 label="Data de validade"
-                type="date"
+                type="month"
                 errorMessage={errors.expDate?.message}
               />
               <InputMask
@@ -240,6 +273,13 @@ const Payment = () => {
                 label="CVV"
                 type="tel"
                 errorMessage={errors.cvv?.message}
+              />
+              <InputMask
+                register={register('cpf')}
+                mask="cpf"
+                label="CPF"
+                type="tel"
+                errorMessage={errors.cpf?.message}
               />
             </div>
           )}
@@ -314,10 +354,10 @@ const Payment = () => {
           </span>
           <ProductCard
             id={1}
-            skuCode={product.skuCode}
-            name={product.name}
-            price={product.price?.listPrice}
-            mainImageUrl={product.mainImageUrl}
+            skuCode={productList[0].skuCode}
+            name={productList[0].name}
+            price={productList[0].price?.listPrice}
+            mainImageUrl={productList[0].image}
           />
         </div>
         <div>

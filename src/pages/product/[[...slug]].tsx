@@ -1,18 +1,18 @@
 import { Carousel } from '@/components/index'
 import ProductCard from '@/components/ProductCard/ProductCard'
-import { formState } from '@/components/States/Atoms'
+import { formState as recoilFormState } from '@/components/States/Atoms'
 import { Table } from '@/components/Table'
 import Button from '@/components/Button'
 import { convertToBRLCurrency } from '@/utils/currency'
 import { useRouter } from 'next/router'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import useFetch from '../../hooks/useFetch'
 import styles from './product.module.scss'
 
 const ProductPage = () => {
   const router = useRouter()
   const { slug } = router.query
-  const setFormState = useSetRecoilState(formState)
+  const setFormState = useSetRecoilState(recoilFormState)
   const { 0: productId, 1: skuCode } = slug
   const { data: product, loading } = useFetch<any>(
     'GET',
@@ -32,8 +32,18 @@ const ProductPage = () => {
         step: 0,
         values: {
           ...oldFormState.values,
-          product: productMain
-        }
+          productList: [
+            // ...oldFormState.values.productList,
+            {
+              name: productMain.name,
+              price: productMain.price,
+              stockQuantity: productMain.stockQuantity,
+              skuCode: productMain.skuCode,
+              quantity: 1,
+              image: productMain.mainImageUrl
+            },
+          ],
+        },
       }
     })
 
@@ -65,7 +75,9 @@ const ProductPage = () => {
       <p className={styles.price}>
         {convertToBRLCurrency.format(productMain.price.listPrice)}
       </p>
-      <Button onClick={handleClickBuy} color="green">Comprar agora</Button>
+      <Button onClick={handleClickBuy} color="green">
+        Comprar agora
+      </Button>
       <div>
         {otherProducts && otherProducts.length > 0 && (
           <>
