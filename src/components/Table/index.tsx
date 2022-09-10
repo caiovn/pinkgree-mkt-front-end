@@ -1,3 +1,4 @@
+import { ISku } from 'src/types'
 import styles from './Table.module.scss'
 
 export const Table = ({ skuAttributes }: Pick<ISku, 'skuAttributes'>) => (

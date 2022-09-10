@@ -1,16 +1,18 @@
-import { BottomNavbar, TopNavbar } from '@/layouts/index'
-import { SSRCookies, SSRKeycloakProvider } from '@react-keycloak/ssr'
+import * as React from 'react'
 import cookie from 'cookie'
 import type { IncomingMessage } from 'http'
 import { AppContext, AppProps } from 'next/app'
+import { BottomNavbar, TopNavbar } from '@/layouts/index'
 import { RecoilRoot } from 'recoil'
 import '../styles/globals.css'
 
+import { SSRCookies, SSRKeycloakProvider } from '@react-keycloak/ssr'
+
 
 const keycloakCfg = {
-  url: 'http://localhost:8080/auth/',
-  realm: 'Pinkgreen-mkt',
-  clientId: 'pinkgreen-frontend',
+  url: 'http://localhost:8080/',
+  realm: 'pinkgreen-mkt',
+  clientId: 'pinkgreen-mkt-frontend',
 }
 
 const initOptions = {
@@ -47,7 +49,6 @@ function parseCookies(req?: IncomingMessage) {
   }
   return cookie.parse(req.headers.cookie || '')
 }
-
 MyApp.getInitialProps = async (context: AppContext) => {
   // Extract cookies from AppContext
   return {

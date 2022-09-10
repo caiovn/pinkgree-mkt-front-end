@@ -7,7 +7,7 @@ import styles from './InputMask.module.scss'
 interface InputMaskProps extends InputHTMLAttributes<HTMLInputElement> {
   mask: Mask
   label?: string
-  errorMessage?: string
+  errorMessage?: any
   register?: any
 }
 
