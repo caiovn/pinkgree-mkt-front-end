@@ -14,12 +14,16 @@ const ProductPage = () => {
   const { slug } = router.query
   const setFormState = useSetRecoilState(recoilFormState)
   const { 0: productId, 1: skuCode } = slug
-  const { data: product, loading } = useFetch<any>(
+  const { data: product, loading, error } = useFetch<any>(
     'GET',
     skuCode ? `sku/${skuCode}` : `sku/product_skus/${productId}`
   )
 
+  if (error) return <h1>Deu erro :(</h1>
+
   if (loading) return <span>loading...</span>
+
+  console.log(product);
 
   const productMain = skuCode ? product : product[0]
   const otherProducts = skuCode ? product.relatedSkus : product.slice(1)

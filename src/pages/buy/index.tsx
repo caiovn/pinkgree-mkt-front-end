@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import ProductCard from '@/components/ProductCard/ProductCard'
 import { formState as recoilFormState } from '@/components/States/Atoms'
@@ -11,11 +11,34 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import InputMask from '@/components/InputMask'
 import { useRouter } from 'next/router'
+import { useKeycloak } from '@react-keycloak/ssr'
+import { KeycloakInstance } from 'keycloak-js'
+import withAuth from 'src/hooks/withAuth'
+import { User } from 'src/types'
 
 const Buy = () => {
   const router = useRouter()
   const setFormState = useSetRecoilState(recoilFormState)
   const stateForm = useRecoilValue(recoilFormState)
+
+  const [user, setUser] = useState<User>()
+
+  const { keycloak } = useKeycloak<KeycloakInstance>()
+
+  useEffect(() => {
+    if (keycloak?.authenticated) {
+      const userData = keycloak?.tokenParsed
+      setUser({
+        name: userData.name,
+        family_name: userData.family_name,
+        given_name: userData.given_name,
+        document: userData.document.replace(/\D/g, ''),
+        email: userData.email,
+        phone: userData.phone.replace(/\D/g, ''),
+      })
+    }
+  }, [keycloak?.authenticated])
+
   const { productList } = stateForm.values
 
   const validationSchema = Yup.object().shape({
@@ -68,8 +91,20 @@ const Buy = () => {
       setValue('number', shippingData.address.number)
       setValue('state', shippingData.address.state)
       setValue('street', shippingData.address.street)
+      
     }
   }, [])
+
+  useEffect(() => {
+    if(user) {
+      console.log('teste', user)
+      setValue('name', user.given_name)
+      setValue('cpf', user.document)
+      setValue('telephone', user.phone)
+      setValue('email', user.email)
+      setValue('surname', user.family_name)
+    }
+  }, [user])
 
   useEffect(() => {
     if (stateForm.step === 1) router.push('/payment')
@@ -102,7 +137,7 @@ const Buy = () => {
               state: data.state,
               street: data.street,
               zipCode: data.zipCode,
-            }
+            },
           },
         },
       }
@@ -135,7 +170,7 @@ const Buy = () => {
   if (!productList[0]) return <></>
 
   return (
-    <>
+    <div>
       <h1>Buy.</h1>
       <h3>item a ser comprado.</h3>
       <ProductCard
@@ -231,8 +266,8 @@ const Buy = () => {
           <Button type="submit">Continuar</Button>
         </div>
       </form>
-    </>
+    </div>
   )
 }
 
-export default Buy
+export default withAuth(Buy)

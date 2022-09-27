@@ -40,6 +40,15 @@ interface ISku {
   skuAttributes: Array<{ label: string; type: string; value: string }>
 }
 
+interface User {
+  name: string,
+  given_name: string,
+  family_name: string,
+  email: string,
+  document: string,
+  phone: string,
+}
+
 type Client = {
   name: string,
   surname: string,

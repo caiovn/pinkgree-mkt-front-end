@@ -4,6 +4,7 @@ import { useKeycloak } from '@react-keycloak/ssr'
 import { KeycloakInstance } from 'keycloak-js'
 import { GetStaticProps } from 'next'
 import Head from 'next/head'
+import { useEffect, useState } from 'react'
 import { IBrand, ICategory } from 'src/types'
 
 interface HomeProps {
@@ -14,30 +15,49 @@ interface HomeProps {
 const Home = ({ categories, brands }: HomeProps) => {
   const { keycloak } = useKeycloak<KeycloakInstance>()
 
-  console.log('keycloak autenticado ==> ', keycloak?.authenticated)
+  const [name, setName] = useState('user');
+  const [authenticated, setAuthenticaded] = useState(false);
+
+  useEffect(() => {
+    if(keycloak.authenticated) {
+      setName(keycloak.tokenParsed.name)
+      setAuthenticaded(!!keycloak.authenticated);
+    }
+  }, [keycloak?.authenticated])
+
+  console.log('keycloak autenticado ==> ', authenticated)
+  
   return (
     <>
-      <div style={{'display': 'flex', 'gap': '8px'}}>
-        <Button
-          type="button"
-          onClick={() => {
-            if (keycloak) {
-              window.location.href = keycloak.createLoginUrl()
-            }
-          }}
-        >
-          Login
-        </Button>
-        <Button
-          type="button"
-          onClick={() => {
-            if (keycloak) {
-              window.location.href = keycloak.createLogoutUrl()
-            }
-          }}
-        >
-          Logout
-        </Button>
+      <div style={{ display: 'flex', gap: '8px', flexDirection: 'column' }}>
+        {!authenticated ? (
+          <>
+            <Button
+              type="button"
+              onClick={() => {
+                if (keycloak) {
+                  window.location.href = keycloak.createLoginUrl()
+                }
+              }}
+            >
+              Login
+            </Button>
+          </>
+        ) : (
+          <>
+            <p>Olá, {name}!</p>
+            <Button
+              type="button"
+              onClick={() => {
+                if (keycloak) {
+                  window.location.href = keycloak.createLogoutUrl()
+                }
+              }}
+            >
+              Logout
+            </Button>
+          </>
+        )}
       </div>
       <Head>
         <title>Pinkgreen.</title>
