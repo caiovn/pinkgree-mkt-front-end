@@ -1,3 +1,4 @@
+import Loading from '@/components/Loading'
 import { useKeycloak } from '@react-keycloak/ssr'
 import type { KeycloakInstance } from 'keycloak-js'
 import { NextPage } from 'next'
@@ -21,7 +22,7 @@ const withAuth =
         {initialized && keycloak?.authenticated ? (
           <Page {...(props as PageProps)} />
         ) : (
-          <span>carregando PORRA</span>
+          <Loading />
         )}
       </>
     )

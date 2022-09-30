@@ -41,12 +41,13 @@ interface ISku {
 }
 
 interface User {
+  customerId: string,
   name: string,
   given_name: string,
   family_name: string,
   email: string,
   document: string,
-  phone: string,
+  telephone: string,
 }
 
 type Client = {
@@ -60,7 +61,7 @@ type Client = {
 
 type Address = {
   country: string,
-  zipCode: string,
+  zipcode: string,
   street: string,
   number: string,
   neighborhood: string,
@@ -127,4 +128,4 @@ type PaymentData = {
   paymentAddress: Address,
 }
 
-type Mask = 'cpf' | 'zipCode' | 'telephone' | 'credit_card' | 'cvv'
+type Mask = 'cpf' | 'zipCode' | 'telephone' | 'credit_card' | 'cvv' | 'monthYear'

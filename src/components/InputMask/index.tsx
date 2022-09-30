@@ -17,6 +17,7 @@ export default function InputMask({
   errorMessage,
   register,
   type,
+  disabled,
 }: InputMaskProps) {
   return (
     <div className={styles.inputContainer}>
@@ -29,6 +30,7 @@ export default function InputMask({
         mask={masks[mask]}
         maskChar={null}
         className={styles.input}
+        disabled={disabled}
         {...register}
       />
     </div>

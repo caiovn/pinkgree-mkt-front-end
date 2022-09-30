@@ -15,18 +15,19 @@ interface HomeProps {
 const Home = ({ categories, brands }: HomeProps) => {
   const { keycloak } = useKeycloak<KeycloakInstance>()
 
-  const [name, setName] = useState('user');
-  const [authenticated, setAuthenticaded] = useState(false);
+  const [name, setName] = useState('user')
+  const [authenticated, setAuthenticaded] = useState<boolean>()
+
 
   useEffect(() => {
-    if(keycloak.authenticated) {
+    if (keycloak.authenticated) {
       setName(keycloak.tokenParsed.name)
-      setAuthenticaded(!!keycloak.authenticated);
+      setAuthenticaded(!!keycloak.authenticated)
     }
   }, [keycloak?.authenticated])
 
   console.log('keycloak autenticado ==> ', authenticated)
-  
+
   return (
     <>
       <div style={{ display: 'flex', gap: '8px', flexDirection: 'column' }}>
@@ -45,7 +46,7 @@ const Home = ({ categories, brands }: HomeProps) => {
           </>
         ) : (
           <>
-            <p>Olá, {name}!</p>
+            {name && <p>Olá, {name}!</p>}
             <Button
               type="button"
               onClick={() => {

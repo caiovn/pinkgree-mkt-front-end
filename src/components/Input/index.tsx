@@ -21,6 +21,7 @@ const Input = ({
   errorMessage,
   placeholder,
   width,
+  disabled,
 }: InputProps) => {
 
   return (
@@ -42,6 +43,7 @@ const Input = ({
         pattern={pattern}
         required={required}
         placeholder={placeholder}
+        disabled={disabled}
         {...register}
       />
 

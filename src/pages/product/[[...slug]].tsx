@@ -21,7 +21,7 @@ const ProductPage = () => {
 
   if (error) return <h1>Deu erro :(</h1>
 
-  if (loading) return <span>loading...</span>
+  if (loading) return
 
   console.log(product);
 

@@ -9,7 +9,7 @@ export const NAVBAR_ITEMS = [
   {
     name: 'Pesquisar',
     path: ROUTES.SEARCH,
-    icon: 'fa-light fa-magnifying-glass',
+    icon: 'fa-solid fa-magnifying-glass',
   },
   {
     name: 'Favoritos',

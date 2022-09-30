@@ -1,7 +1,7 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { formState as recoilFormState } from '@/components/States/Atoms'
 import * as Yup from 'yup'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import ProductCard from '@/components/ProductCard/ProductCard'
 import Button from '@/components/Button'
 import InputMask from '@/components/InputMask'
@@ -12,6 +12,11 @@ import { useForm, useWatch } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import RadioGroup from '@/components/RadioGroup'
 import Checkbox from '@/components/Checkbox'
+import { User } from 'src/types'
+import { KeycloakInstance } from 'keycloak-js'
+import { useKeycloak } from '@react-keycloak/ssr'
+import withAuth from 'src/hooks/withAuth'
+import { BASE_URL } from '@/constants/api'
 
 const Payment = () => {
   const router = useRouter()
@@ -19,6 +24,25 @@ const Payment = () => {
   const setFormState = useSetRecoilState(recoilFormState)
   const { productList } = stateForm.values
   const { address } = stateForm.values.shippingData
+
+  const [user, setUser] = useState<User>()
+
+  const { keycloak } = useKeycloak<KeycloakInstance>()
+
+  useEffect(() => {
+    if (keycloak?.authenticated) {
+      const userData = keycloak?.tokenParsed
+      setUser({
+        customerId: userData.sub,
+        name: userData.name,
+        family_name: userData.family_name,
+        given_name: userData.given_name,
+        document: userData.document,
+        email: userData.email,
+        telephone: userData.phone,
+      })
+    }
+  }, [keycloak?.authenticated])
 
   const formattedAddress = useMemo(
     () =>
@@ -31,28 +55,28 @@ const Payment = () => {
       .required('Forma de pagamento é obrigatório!')
       .nullable(),
     cardNumber: Yup.string().when('paymentMethod', {
-      is: 'boleto',
+      is: 'BANK_SLIP',
       then: Yup.string(),
       otherwise: Yup.string().required('Numero do cartão é obrigatório!'),
       // .matches(/^4[0-9]{12}(?:[0-9]{3})?$/, 'cartão de credito inválido!'),
     }),
     titularName: Yup.string().when('paymentMethod', {
-      is: 'boleto',
+      is: 'BANK_SLIP',
       then: Yup.string(),
       otherwise: Yup.string().required('Nome do titular é obrigatório!'),
     }),
     expDate: Yup.string().when('paymentMethod', {
-      is: 'boleto',
+      is: 'BANK_SLIP',
       then: Yup.string(),
       otherwise: Yup.string().required('data de validade é obrigatório!'),
     }),
     cvv: Yup.string().when('paymentMethod', {
-      is: 'boleto',
+      is: 'BANK_SLIP',
       then: Yup.string(),
       otherwise: Yup.string().required('CVV é obrigatorio!'),
     }),
     cpf: Yup.string().when('paymentMethod', {
-      is: 'boleto',
+      is: 'BANK_SLIP',
       then: Yup.string(),
       otherwise: Yup.string()
         .required('cpf é obrigatorio!')
@@ -170,26 +194,24 @@ const Payment = () => {
             paymentMethod: data.paymentMethod,
             paymentMethodProperties: {
               ...oldFormState.values.paymentData.paymentMethodProperties,
-              cardNumber: data.cardNumber,
+              cardNumber: data.cardNumber.replace(/\s/g, ''),
               ownerName:
-                paymentMethodValue === 'boleto'
-                  ? `${stateForm.values.customerData.name} ${stateForm.values.customerData.lastName}`
+                paymentMethodValue === 'BANK_SLIP'
+                  ? `${user.name}`
                   : data.titularName,
               cvv: data.cvv,
               validationDate: data.expDate,
               document:
-                paymentMethodValue === 'boleto'
-                  ? stateForm.values.customerData.document
-                  : data.cpf,
-              birthday: '2002/08/11',
-              phone: stateForm.values.customerData.phone,
-              email: stateForm.values.customerData.email,
+                paymentMethodValue === 'BANK_SLIP' ? user.document : data.cpf,
+              birthday: '11/08/2002',
+              phone: user.telephone,
+              email: user.email,
             },
             paymentAddress: {
               ...oldFormState.values.paymentData.paymentAddress,
-              zipCode: isDifferentAddress
+              zipcode: isDifferentAddress
                 ? data.zipCode
-                : stateForm.values.shippingData.address.zipCode,
+                : stateForm.values.shippingData.address.zipcode,
               street: isDifferentAddress
                 ? data.street
                 : stateForm.values.shippingData.address.street,
@@ -208,11 +230,24 @@ const Payment = () => {
               state: isDifferentAddress
                 ? data.state
                 : stateForm.values.shippingData.address.state,
-              phone: stateForm.values.customerData.phone,
+              phone: user.telephone,
             },
           },
         },
       }
+    })
+
+    console.log(JSON.stringify(stateForm.values))
+
+    fetch(`${BASE_URL}/order`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${keycloak.token}`,
+      },
+      body: JSON.stringify(stateForm.values),
+    }).then((response) => {
+      response.json()
     })
 
     return false
@@ -223,10 +258,7 @@ const Payment = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <h2>Endereço:</h2>
-          <span>
-            {stateForm.values.customerData.name}{' '}
-            {stateForm.values.customerData.lastName}
-          </span>
+          {user && <span>{user.name}</span>}
           <br />
           <span>{formattedAddress}</span>
           <span></span>
@@ -236,16 +268,16 @@ const Payment = () => {
             <h2>Forma de pagamento:</h2>
             <RadioGroup
               options={[
-                { label: 'Cartão de crédito', value: 'credit_card' },
-                { label: 'Cartão de débito', value: 'debit_card' },
-                { label: 'Boleto', value: 'boleto' },
+                { label: 'Cartão de crédito', value: 'CREDIT_CARD' },
+                { label: 'Cartão de débito', value: 'DEBIT_CARD' },
+                { label: 'Boleto', value: 'BANK_SLIP' },
               ]}
               register={register('paymentMethod')}
               errorMessage={errors.paymentMethod?.message}
             />
           </div>
-          {(paymentMethodValue === 'credit_card' ||
-            paymentMethodValue === 'debit_card') && (
+          {(paymentMethodValue === 'CREDIT_CARD' ||
+            paymentMethodValue === 'DEBIT_CARD') && (
             <div className="card-fields">
               <h2>Dados do cartão:</h2>
               <InputMask
@@ -261,10 +293,11 @@ const Payment = () => {
                 type="text"
                 errorMessage={errors.titularName?.message}
               />
-              <Input
+              <InputMask
+                mask="monthYear"
                 register={register('expDate')}
                 label="Data de validade"
-                type="month"
+                type="tel"
                 errorMessage={errors.expDate?.message}
               />
               <InputMask
@@ -371,4 +404,4 @@ const Payment = () => {
   )
 }
 
-export default Payment
+export default withAuth(Payment)
