@@ -1,15 +1,38 @@
 .menuPage {
-    .menuLoggedHeader {
-        padding: 15px 10px;
+    border-radius: 5px;
+    background-color: #F6F6F6;
+
+    .menuLoggedPageHeader {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        padding: 5px 15px;
     }
     
-    .menuUnloggedHeader {
-        padding: 15px 10px;
+    .menuUnloggedPageHeader {
         display: flex;
         align-items: center;
         gap: 15px;
+        padding: 5px 15px;
+    }
+
+    .menuPageBody {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding: 15px;
+
+        .menuPageBodyItem {
+            gap: 15px;
+            display: flex;
+            padding: 0 10px;
+            align-items: center;
+            border-radius: 5px;
+            background-color: #ECECEC;
+        }
+    }
+
+    .menuPageOptions {
+        padding: 0 5px;
     }
 }

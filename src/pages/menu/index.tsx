@@ -1,3 +1,4 @@
+import Button from '@/components/Button'
 import { useKeycloak } from '@react-keycloak/ssr'
 import { KeycloakInstance } from 'keycloak-js'
 import Head from 'next/head'
@@ -23,6 +24,12 @@ export default function Menu() {
     }
   }
 
+  const logout = () => {
+    if (keycloak) {
+      window.location.href = keycloak.createLogoutUrl()
+    }
+  }
+
   return (
     <>
       <Head>
@@ -30,16 +37,25 @@ export default function Menu() {
       </Head>
       <div className={style.menuPage}>
         {!authenticated ? (
-          <div className={style.menuLoggedHeader} onClick={login}>
+          <div className={style.menuLoggedPageHeader} onClick={login}>
             <p>Entre ou cadastre-se</p>
             <i className="fa-solid fa-chevron-right"></i>
           </div>
         ) : (
-          <div className={style.menuUnloggedHeader}>
+          <div className={style.menuUnloggedPageHeader}>
             <i className="fa-solid fa-user"></i>
             <p>Olá, {name}!</p>
           </div>
         )}
+        <div className={style.menuPageBody}>
+          <div className={style.menuPageBodyItem}>
+            <i className="fa-solid fa-box"></i>
+            <p>Meus pedidos</p>
+          </div>
+        </div>
+        <div className={style.menuPageOptions}>
+          {authenticated && <Button type="button" onClick={logout}>Logout</Button>}
+        </div>
       </div>
     </>
   )
