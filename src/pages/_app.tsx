@@ -7,6 +7,7 @@ import { RecoilRoot } from 'recoil'
 import '../styles/globals.css'
 
 import { SSRCookies, SSRKeycloakProvider } from '@react-keycloak/ssr'
+import Loading from '@/components/Loading'
 
 
 const keycloakCfg = {
@@ -30,6 +31,7 @@ function MyApp({ Component, pageProps, cookies }: AppProps & InitialProps) {
         keycloakConfig={keycloakCfg}
         persistor={SSRCookies(cookies)}
         initOptions={initOptions}
+        LoadingComponent={<Loading />}
       >
         <main>
           <TopNavbar />
