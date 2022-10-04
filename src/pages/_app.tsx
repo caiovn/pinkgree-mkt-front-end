@@ -9,7 +9,6 @@ import '../styles/globals.css'
 import { SSRCookies, SSRKeycloakProvider } from '@react-keycloak/ssr'
 import Loading from '@/components/Loading'
 
-
 const keycloakCfg = {
   url: 'http://localhost:8080/',
   realm: 'pinkgreen-mkt',
@@ -31,15 +30,27 @@ function MyApp({ Component, pageProps, cookies }: AppProps & InitialProps) {
         keycloakConfig={keycloakCfg}
         persistor={SSRCookies(cookies)}
         initOptions={initOptions}
-        LoadingComponent={<Loading />}
-      >
-        <main>
-          <TopNavbar />
-          <div className="content">
-            <Component {...pageProps} />
+        LoadingComponent={
+          <div className="loading-container">
+            <Loading />
           </div>
-          <BottomNavbar />
-        </main>
+        }
+      >
+        <React.Suspense
+          fallback={
+            <div className="loading-container">
+              <Loading />
+            </div>
+          }
+        >
+          <main>
+            <TopNavbar />
+            <div className="content">
+              <Component {...pageProps} />
+            </div>
+            <BottomNavbar />
+          </main>
+        </React.Suspense>
       </SSRKeycloakProvider>
     </RecoilRoot>
   )

@@ -46,7 +46,7 @@ const Payment = () => {
 
   const formattedAddress = useMemo(
     () =>
-      `${address.street} ${address.number} ${address.neighborhood} ${address.city}, ${address.state} ${address.zipCode} - ${address.country}`,
+      `${address.street} ${address.number} ${address.neighborhood} ${address.city}, ${address.state} ${address.zipcode} - ${address.country}`,
     [address]
   )
 
@@ -192,21 +192,26 @@ const Payment = () => {
           paymentData: {
             ...oldFormState.values.paymentData,
             paymentMethod: data.paymentMethod,
-            paymentMethodProperties: {
-              ...oldFormState.values.paymentData.paymentMethodProperties,
-              cardNumber: data.cardNumber.replace(/\s/g, ''),
-              ownerName:
-                paymentMethodValue === 'BANK_SLIP'
-                  ? `${user.name}`
-                  : data.titularName,
-              cvv: data.cvv,
-              validationDate: data.expDate,
-              document:
-                paymentMethodValue === 'BANK_SLIP' ? user.document : data.cpf,
-              birthday: '11/08/2002',
-              phone: user.telephone,
-              email: user.email,
-            },
+            paymentMethodProperties: (() => {
+              if (paymentMethodValue === 'BANK_SLIP')
+                return {
+                  document: user.document,
+                  ownerName: user.name,
+                  phone: user.telephone,
+                  email: user.email,
+                }
+
+              return {
+                cardNumber: data.cardNumber.replace(/\s/g, ''),
+                cvv: data.cvv,
+                validationDate: data.expDate,
+                document: data.cpf,
+                ownerName: data.titularName,
+                birthday: '11/08/2002',
+                phone: user.telephone,
+                email: user.email,
+              }
+            })(),
             paymentAddress: {
               ...oldFormState.values.paymentData.paymentAddress,
               zipcode: isDifferentAddress

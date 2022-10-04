@@ -18,7 +18,6 @@ const Home = ({ categories, brands }: HomeProps) => {
   const [name, setName] = useState('user')
   const [authenticated, setAuthenticaded] = useState<boolean>()
 
-
   useEffect(() => {
     if (keycloak.authenticated) {
       setName(keycloak.tokenParsed.name)
