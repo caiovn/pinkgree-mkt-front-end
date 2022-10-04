@@ -4,6 +4,7 @@ enum ROUTES {
   FAVS = '/favs',
   MENU = '/menu',
   PRODUCT_PAGE = '/product',
+  ORDERS = '/orders'
 }
 
 export default ROUTES

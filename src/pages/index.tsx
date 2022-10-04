@@ -30,36 +30,6 @@ const Home = ({ categories, brands }: HomeProps) => {
 
   return (
     <>
-      <div style={{ display: 'flex', gap: '8px', flexDirection: 'column' }}>
-        {!authenticated ? (
-          <>
-            <Button
-              type="button"
-              onClick={() => {
-                if (keycloak) {
-                  window.location.href = keycloak.createLoginUrl()
-                }
-              }}
-            >
-              Login
-            </Button>
-          </>
-        ) : (
-          <>
-            {name && <p>Olá, {name}!</p>}
-            <Button
-              type="button"
-              onClick={() => {
-                if (keycloak) {
-                  window.location.href = keycloak.createLogoutUrl()
-                }
-              }}
-            >
-              Logout
-            </Button>
-          </>
-        )}
-      </div>
       <Head>
         <title>Pinkgreen.</title>
       </Head>

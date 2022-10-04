@@ -129,3 +129,29 @@ type PaymentData = {
 }
 
 type Mask = 'cpf' | 'zipCode' | 'telephone' | 'credit_card' | 'cvv' | 'monthYear'
+
+enum OrderStatus {
+  ORDER_CANCELED,
+  ORDER_SHIPPED,
+  ORDER_EN_ROUTE,
+  ORDER_IN_SEPARATION,
+  ORDER_STOCK_FAILED,
+  ORDER_STOCK_RESERVED,
+  PAYMENT_CONFIRMED,
+  ORDER_CREATED
+}
+
+type Order = {
+  id: String,
+  status: OrderStatus,
+  customerData: CustomerData,
+  shippingData: ShippingData,
+  productList: List<ProductList>,
+  paymentData: {
+    amount: number,
+    paymentMethod: string,
+    paymentAddress: Address
+  },
+  createdAt: Instant,
+  updatedAt: Instant
+}

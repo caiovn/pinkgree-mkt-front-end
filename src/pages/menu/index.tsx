@@ -1,4 +1,5 @@
 import Button from '@/components/Button'
+import ROUTES from '@/routes/routes'
 import { useKeycloak } from '@react-keycloak/ssr'
 import { KeycloakInstance } from 'keycloak-js'
 import Head from 'next/head'
@@ -30,6 +31,10 @@ export default function Menu() {
     }
   }
 
+  const orders = () => {
+    window.location.href = `${ROUTES.ORDERS}`
+  }
+
   return (
     <>
       <Head>
@@ -48,7 +53,7 @@ export default function Menu() {
           </div>
         )}
         <div className={style.menuPageBody}>
-          <div className={style.menuPageBodyItem}>
+          <div className={style.menuPageBodyItem} onClick={orders}>
             <i className="fa-solid fa-box"></i>
             <p>Meus pedidos</p>
           </div>
