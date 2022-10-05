@@ -97,7 +97,7 @@ type ShippingData = {
   address: Address,
 }
 
-type ProductList = [
+type ProductList =
   {
     name: string,
     price: {
@@ -110,8 +110,7 @@ type ProductList = [
     skuCode: string,
     quantity: number,
     image: string,
-  },
-]
+  }
 
 type PaymentData = {
   paymentMethod: string,
@@ -146,7 +145,7 @@ type Order = {
   status: OrderStatus,
   customerData: CustomerData,
   shippingData: ShippingData,
-  productList: List<ProductList>,
+  productList: Array<ProductList>,
   paymentData: {
     amount: number,
     paymentMethod: string,
