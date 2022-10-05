@@ -15,6 +15,7 @@ import { useKeycloak } from '@react-keycloak/ssr'
 import { KeycloakInstance } from 'keycloak-js'
 import withAuth from 'src/hooks/withAuth'
 import { User } from 'src/types'
+import ROUTES from '@/routes/routes'
 
 const Buy = () => {
   const router = useRouter()
@@ -24,6 +25,10 @@ const Buy = () => {
   const [user, setUser] = useState<User>()
 
   const { keycloak } = useKeycloak<KeycloakInstance>()
+
+  useEffect(() => {
+    if (stateForm.step != 0) router.push(ROUTES.HOME)
+  }, []);
 
   useEffect(() => {
     if (keycloak?.authenticated) {
@@ -91,10 +96,6 @@ const Buy = () => {
     }
   }, [user])
 
-  useEffect(() => {
-    if (stateForm.step === 1) router.push('/payment')
-  }, [stateForm])
-
   const onSubmit = (data) => {
     setFormState((oldFormState) => {
       return {
@@ -120,6 +121,8 @@ const Buy = () => {
         },
       }
     })
+
+    router.push(ROUTES.PAYMENT)
 
     return false
   }

@@ -17,8 +17,10 @@ import { KeycloakInstance } from 'keycloak-js'
 import { useKeycloak } from '@react-keycloak/ssr'
 import withAuth from 'src/hooks/withAuth'
 import { BASE_URL } from '@/constants/api'
+import ROUTES from '@/routes/routes'
 
 const Payment = () => {
+  const [isSubmitted, setSubmitted] = useState<boolean>(false);
   const router = useRouter()
   const stateForm = useRecoilValue(recoilFormState)
   const setFormState = useSetRecoilState(recoilFormState)
@@ -43,6 +45,10 @@ const Payment = () => {
       })
     }
   }, [keycloak?.authenticated])
+
+  useEffect(() => {
+    if (stateForm.step != 1) router.push(ROUTES.HOME)
+  }, []);
 
   const formattedAddress = useMemo(
     () =>
@@ -182,8 +188,8 @@ const Payment = () => {
     })
   }
 
-  const onSubmit = (data) => {
-    setFormState((oldFormState) => {
+  const onSubmit = async (data) => {
+    await setFormState((oldFormState) => {
       return {
         ...oldFormState,
         step: 2,
@@ -242,9 +248,15 @@ const Payment = () => {
       }
     })
 
-    console.log(JSON.stringify(stateForm.values))
+    setSubmitted(true)
 
-    fetch(`${BASE_URL}/order`, {
+    router.push(ROUTES.CONCLUSION);
+    
+    return false
+  }
+
+  useEffect(() => {
+    if(isSubmitted === true) fetch(`${BASE_URL}/order`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -254,9 +266,7 @@ const Payment = () => {
     }).then((response) => {
       response.json()
     })
-
-    return false
-  }
+  }, [isSubmitted, stateForm])
 
   return (
     <div>
