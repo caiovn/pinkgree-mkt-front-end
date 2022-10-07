@@ -1,8 +1,7 @@
-import { type } from "os"
-
 type IBrand = {
   id: number
   name: string
+  brandImage?: string
 }
 
 interface ICategory extends IBrand {
@@ -41,93 +40,98 @@ interface ISku {
 }
 
 interface User {
-  customerId: string,
-  name: string,
-  given_name: string,
-  family_name: string,
-  email: string,
-  document: string,
-  telephone: string,
+  customerId: string
+  name: string
+  given_name: string
+  family_name: string
+  email: string
+  document: string
+  telephone: string
 }
 
 type Client = {
-  name: string,
-  surname: string,
-  cpf: string,
-  email: string,
-  telephone: string,
+  name: string
+  surname: string
+  cpf: string
+  email: string
+  telephone: string
   address: Address
 }
 
 type Address = {
-  country: string,
-  zipcode: string,
-  street: string,
-  number: string,
-  neighborhood: string,
-  complement: string,
-  city: string,
-  state: string,
-  phone: string,
+  country: string
+  zipcode: string
+  street: string
+  number: string
+  neighborhood: string
+  complement: string
+  city: string
+  state: string
+  phone: string
 }
 
 type Billing = {
-  paymentMethod: string,
+  paymentMethod: string
   creditCard: {
-    name: string,
-    number: string,
-    cvv: string,
-    expDate: string,
-  },
+    name: string
+    number: string
+    cvv: string
+    expDate: string
+  }
   address: Address
 }
 
 type CustomerData = {
-  id: string,
-  document: string,
-  name: string,
-  lastName: string,
-  email: string,
-  phone: string,
+  id: string
+  document: string
+  name: string
+  lastName: string
+  email: string
+  phone: string
 }
 
 type ShippingData = {
-  freightPrice: number,
-  deliveryDays: number,
-  address: Address,
+  freightPrice: number
+  deliveryDays: number
+  address: Address
 }
 
-type ProductList =
-  {
-    name: string,
-    price: {
-      listPrice: number,
-      salePrice: number,
-      startDate: string,
-      endDate: string,
-    }
-    stockQuantity: number,
-    skuCode: string,
-    quantity: number,
-    image: string,
+type ProductList = {
+  name: string
+  price: {
+    listPrice: number
+    salePrice: number
+    startDate: string
+    endDate: string
   }
+  stockQuantity: number
+  skuCode: string
+  quantity: number
+  image: string
+}
 
 type PaymentData = {
-  paymentMethod: string,
+  paymentMethod: string
   paymentMethodProperties: {
-    cardNumber?: string,
-    cvv?: string,
-    validationDate?: string,
-    document: string,
-    ownerName: string,
-    birthday?: string,
-    phone: string,
-    email: string,
+    cardNumber?: string
+    cvv?: string
+    validationDate?: string
+    document: string
+    ownerName: string
+    birthday?: string
+    phone: string
+    email: string
   }
-  paymentAddress: Address,
+  paymentAddress: Address
 }
 
-type Mask = 'cpf' | 'zipCode' | 'telephone' | 'credit_card' | 'cvv' | 'monthYear'
+type Mask =
+  | 'cpf'
+  | 'zipCode'
+  | 'telephone'
+  | 'credit_card'
+  | 'cvv'
+  | 'monthYear'
 
 enum OrderStatus {
   ORDER_CANCELED,
@@ -137,20 +141,20 @@ enum OrderStatus {
   ORDER_STOCK_FAILED,
   ORDER_STOCK_RESERVED,
   PAYMENT_CONFIRMED,
-  ORDER_CREATED
+  ORDER_CREATED,
 }
 
 type Order = {
-  id: String,
-  status: OrderStatus,
-  customerData: CustomerData,
-  shippingData: ShippingData,
-  productList: Array<ProductList>,
+  id: String
+  status: OrderStatus
+  customerData: CustomerData
+  shippingData: ShippingData
+  productList: Array<ProductList>
   paymentData: {
-    amount: number,
-    paymentMethod: string,
+    amount: number
+    paymentMethod: string
     paymentAddress: Address
-  },
-  createdAt: Instant,
+  }
+  createdAt: Instant
   updatedAt: Instant
 }

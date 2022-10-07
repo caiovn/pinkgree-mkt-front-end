@@ -57,9 +57,7 @@ const Home = ({ categories, brands }: HomeProps) => {
                   key={brand.id}
                   name={brand.name}
                   id={brand.id}
-                  image={
-                    'https://i.kym-cdn.com/photos/images/original/001/472/727/90a.jpg'
-                  }
+                  image={brand.brandImage}
                 />
               )
             })}

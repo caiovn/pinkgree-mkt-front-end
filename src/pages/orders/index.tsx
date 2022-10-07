@@ -1,8 +1,9 @@
+import ProductCard from '@/components/ProductCard/ProductCard'
+import ROUTES from '@/routes/routes'
 import { useKeycloak } from '@react-keycloak/ssr'
 import { KeycloakInstance } from 'keycloak-js'
 import useFetch from 'src/hooks/useFetch'
 import withAuth from 'src/hooks/withAuth'
-import { Order } from 'src/types'
 
 const Orders = () => {
   const { keycloak } = useKeycloak<KeycloakInstance>()
@@ -19,14 +20,18 @@ const Orders = () => {
       {/* TODO: Criar card para exibir pedidos */}
 
       {orders &&
-        orders.map((it) => {
-          console.log(it)
+        orders.map((order) => {
+          console.log(order)
           return (
-          <div>
-            <span>{it.productList[0].name}</span>
-              <p key={`${it.id}`}>ID. {it.id}</p>
+            <div>
+              <ProductCard
+                id={order.id}
+                name={order.productList[0].name}
+                price={order.productList[0].price.listPrice}
+                href={`${ROUTES.ORDERS}/${order.id}`}
+              />
             </div>
-              )
+          )
         })}
     </>
   )
