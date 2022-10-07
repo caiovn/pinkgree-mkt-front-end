@@ -29,6 +29,7 @@ function request(
 function useFetch<R, P = void>(
   method: 'GET' | 'POST',
   path: string,
+  headers: Headers = new Headers(),
   body?: P,
   isReady = true
 ): FetchResponse<R> {
@@ -38,9 +39,7 @@ function useFetch<R, P = void>(
 
   useEffect(() => {
     if (isReady) {
-      const headers = new Headers({
-        'Content-Type': 'application/json',
-      })
+      headers.append('Content-Type', 'application/json')
       const requestOptions: RequestInit = { method, headers }
       if (body) {
         requestOptions.body = JSON.stringify(body)

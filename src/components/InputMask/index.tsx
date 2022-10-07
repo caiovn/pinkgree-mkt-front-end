@@ -7,7 +7,7 @@ import styles from './InputMask.module.scss'
 interface InputMaskProps extends InputHTMLAttributes<HTMLInputElement> {
   mask: Mask
   label?: string
-  errorMessage?: string
+  errorMessage?: any
   register?: any
 }
 
@@ -17,6 +17,7 @@ export default function InputMask({
   errorMessage,
   register,
   type,
+  disabled,
 }: InputMaskProps) {
   return (
     <div className={styles.inputContainer}>
@@ -29,6 +30,7 @@ export default function InputMask({
         mask={masks[mask]}
         maskChar={null}
         className={styles.input}
+        disabled={disabled}
         {...register}
       />
     </div>

@@ -12,7 +12,7 @@ const { persistAtom } = recoilPersist()
 export interface IFormState {
   step?: number
   values: {
-    customerData: CustomerData
+    customerId: string
     shippingData: ShippingData
     productList: ProductList
     paymentData: PaymentData
@@ -24,14 +24,7 @@ const formState = atom<IFormState>({
   default: {
     step: null,
     values: {
-      customerData: {
-        id: '6034f9a9-6337-40ca-8bac-cf92cc597799',
-        document: '',
-        name: '',
-        lastName: '',
-        email: '',
-        phone: '',
-      },
+      customerId: '',
       shippingData: {
         freightPrice: 9.9,
         deliveryDays: 3,
@@ -42,7 +35,7 @@ const formState = atom<IFormState>({
           neighborhood: '',
           street: '',
           number: '',
-          zipCode: '',
+          zipcode: '',
           complement: '',
           phone: '',
         },
@@ -81,7 +74,7 @@ const formState = atom<IFormState>({
           neighborhood: '',
           street: '',
           number: '',
-          zipCode: '',
+          zipcode: '',
           complement: '',
           phone: '',
         },

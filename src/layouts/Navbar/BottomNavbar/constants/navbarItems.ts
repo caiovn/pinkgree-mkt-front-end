@@ -4,21 +4,21 @@ export const NAVBAR_ITEMS = [
   {
     name: 'Home',
     path: ROUTES.HOME,
-    icon: 'fas fa-home',
+    icon: 'fa-solid fa-house',
   },
   {
     name: 'Pesquisar',
     path: ROUTES.SEARCH,
-    icon: 'fas fa-search',
+    icon: 'fa-solid fa-magnifying-glass',
   },
   {
     name: 'Favoritos',
     path: ROUTES.FAVS,
-    icon: 'far fa-heart',
+    icon: 'fa-solid fa-heart',
   },
   {
     name: 'Menu',
     path: ROUTES.MENU,
-    icon: 'fas fa-bars',
+    icon: 'fa-solid fa-bars',
   },
 ]

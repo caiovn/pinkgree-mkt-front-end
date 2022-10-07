@@ -1,7 +1,11 @@
-import { Carousel, CategoryCard } from '@/components/index'
+import { Button, Carousel, CategoryCard } from '@/components/index'
 import { BASE_URL } from '@/constants/api'
+import { useKeycloak } from '@react-keycloak/ssr'
+import { KeycloakInstance } from 'keycloak-js'
 import { GetStaticProps } from 'next'
 import Head from 'next/head'
+import { useEffect, useState } from 'react'
+import { IBrand, ICategory } from 'src/types'
 
 interface HomeProps {
   categories: Array<ICategory>
@@ -9,6 +13,20 @@ interface HomeProps {
 }
 
 const Home = ({ categories, brands }: HomeProps) => {
+  const { keycloak } = useKeycloak<KeycloakInstance>()
+
+  const [name, setName] = useState('user')
+  const [authenticated, setAuthenticaded] = useState<boolean>()
+
+  useEffect(() => {
+    if (keycloak.authenticated) {
+      setName(keycloak.tokenParsed.name)
+      setAuthenticaded(!!keycloak.authenticated)
+    }
+  }, [keycloak?.authenticated])
+
+  console.log('keycloak autenticado ==> ', authenticated)
+
   return (
     <>
       <Head>
@@ -39,9 +57,7 @@ const Home = ({ categories, brands }: HomeProps) => {
                   key={brand.id}
                   name={brand.name}
                   id={brand.id}
-                  image={
-                    'https://i.kym-cdn.com/photos/images/original/001/472/727/90a.jpg'
-                  }
+                  image={brand.brandImage}
                 />
               )
             })}

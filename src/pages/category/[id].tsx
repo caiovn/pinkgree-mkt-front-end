@@ -1,6 +1,7 @@
 import ProductCard from '@/components/ProductCard/ProductCard'
 import { useRouter } from 'next/router'
 import useFetch from 'src/hooks/useFetch'
+import { IProduct } from 'src/types'
 
 const Category = () => {
   const router = useRouter()

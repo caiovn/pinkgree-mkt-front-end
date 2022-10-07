@@ -4,7 +4,7 @@ import styles from './Input.module.scss'
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string
   register?: any
-  errorMessage?: string
+  errorMessage?: any
 }
 
 const Input = ({
@@ -21,6 +21,7 @@ const Input = ({
   errorMessage,
   placeholder,
   width,
+  disabled,
 }: InputProps) => {
 
   return (
@@ -42,6 +43,7 @@ const Input = ({
         pattern={pattern}
         required={required}
         placeholder={placeholder}
+        disabled={disabled}
         {...register}
       />
 

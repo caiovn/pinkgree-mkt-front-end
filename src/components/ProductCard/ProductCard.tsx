@@ -12,10 +12,15 @@ const ProductCard = ({
   name,
   price,
   mainImageUrl,
+  href = null,
 }: IProduct) => {
+  const handleChangeHref = () => {
+    if (!href) return `${ROUTES.PRODUCT_PAGE}/${id}/${skuCode}`
+    return href
+  }
+
   return (
-    // <Link>
-    <a href={`${ROUTES.PRODUCT_PAGE}/${id}/${skuCode}`}>
+    <a href={handleChangeHref()}>
       <div className={styles.container}>
         {mainImageUrl && (
           <img
@@ -30,7 +35,6 @@ const ProductCard = ({
         </div>
       </div>
     </a>
-    // </Link>
   )
 }
 

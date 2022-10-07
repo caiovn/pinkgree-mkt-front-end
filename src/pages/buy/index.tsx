@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import ProductCard from '@/components/ProductCard/ProductCard'
 import { formState as recoilFormState } from '@/components/States/Atoms'
@@ -11,28 +11,48 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import InputMask from '@/components/InputMask'
 import { useRouter } from 'next/router'
+import { useKeycloak } from '@react-keycloak/ssr'
+import { KeycloakInstance } from 'keycloak-js'
+import withAuth from 'src/hooks/withAuth'
+import { User } from 'src/types'
+import ROUTES from '@/routes/routes'
 
 const Buy = () => {
   const router = useRouter()
   const setFormState = useSetRecoilState(recoilFormState)
   const stateForm = useRecoilValue(recoilFormState)
+
+  const [user, setUser] = useState<User>()
+
+  const { keycloak } = useKeycloak<KeycloakInstance>()
+
+  useEffect(() => {
+    if (stateForm.step != 0) router.push(ROUTES.HOME)
+  }, []);
+
+  useEffect(() => {
+    if (keycloak?.authenticated) {
+      const userData = keycloak?.tokenParsed
+      setUser({
+        customerId: userData.sub,
+        name: userData.name,
+        family_name: userData.family_name,
+        given_name: userData.given_name,
+        document: userData.document,
+        email: userData.email,
+        telephone: userData.phone,
+      })
+    }
+  }, [keycloak?.authenticated])
+
   const { productList } = stateForm.values
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required('nome é obrigatorio!'),
-    surname: Yup.string().required('sobrenome é obrigatório!'),
-    email: Yup.string()
-      .required('email é obrigatorio!')
-      .email('o email é invalido!'),
-    telephone: Yup.string()
-      .required('telefone é obrigatorio!')
-      .matches(
-        /^\([1-9]{2}\) (?:[2-8]|9[1-9])[0-9]{3}\-[0-9]{4}$/,
-        'numero inválido!'
-      ),
-    cpf: Yup.string()
-      .required('cpf é obrigatorio!')
-      .matches(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/, 'CPF inválido!'),
+    name: Yup.string(),
+    surname: Yup.string(),
+    email: Yup.string().email('o email é invalido!'),
+    telephone: Yup.string(),
+    cpf: Yup.string(),
     zipCode: Yup.string()
       .required('CEP é obrigatorio!')
       .matches(/^[0-9]{5}-[0-9]{3}$/, 'CEP inválido!'),
@@ -54,14 +74,9 @@ const Buy = () => {
 
   useEffect(() => {
     if (!productList[0]) router.push('/')
-    if (stateForm.values?.customerData && stateForm.values?.shippingData) {
-      const { customerData, shippingData } = stateForm.values
-      setValue('name', customerData.name)
-      setValue('cpf', customerData.document)
-      setValue('email', customerData.email)
-      setValue('surname', customerData.lastName)
-      setValue('telephone', customerData.phone)
-      setValue('zipCode', shippingData.address.zipCode)
+    if (stateForm.values?.shippingData) {
+      const { shippingData } = stateForm.values
+      setValue('zipCode', shippingData.address.zipcode)
       setValue('city', shippingData.address.city)
       setValue('complement', shippingData.address.complement)
       setValue('neighborhood', shippingData.address.neighborhood)
@@ -72,8 +87,14 @@ const Buy = () => {
   }, [])
 
   useEffect(() => {
-    if (stateForm.step === 1) router.push('/payment')
-  }, [stateForm])
+    if (user) {
+      setValue('name', user.given_name)
+      setValue('email', user.email)
+      setValue('surname', user.family_name)
+      setValue('cpf', user.document)
+      setValue('telephone', user.telephone)
+    }
+  }, [user])
 
   const onSubmit = (data) => {
     setFormState((oldFormState) => {
@@ -82,14 +103,7 @@ const Buy = () => {
         step: 1,
         values: {
           ...oldFormState.values,
-          customerData: {
-            ...oldFormState.values.customerData,
-            document: data.cpf,
-            email: data.email,
-            lastName: data.surname,
-            name: data.name,
-            phone: data.telephone,
-          },
+          customerId: user.customerId,
           shippingData: {
             ...oldFormState.values.shippingData,
             address: {
@@ -101,12 +115,14 @@ const Buy = () => {
               phone: data.telephone,
               state: data.state,
               street: data.street,
-              zipCode: data.zipCode,
-            }
+              zipcode: data.zipCode,
+            },
           },
         },
       }
     })
+
+    router.push(ROUTES.PAYMENT)
 
     return false
   }
@@ -132,10 +148,10 @@ const Buy = () => {
     }
   }, [zipCodeValue])
 
-  if (!productList[0]) return <></>
+  if (!productList[0]) return
 
   return (
-    <>
+    <div>
       <h1>Buy.</h1>
       <h3>item a ser comprado.</h3>
       <ProductCard
@@ -153,32 +169,35 @@ const Buy = () => {
             label="Nome"
             type="text"
             errorMessage={errors.name?.message}
+            disabled={true}
           />
           <Input
             register={register('surname')}
             label="Sobrenome"
             type="text"
             errorMessage={errors.surname?.message}
+            disabled={true}
           />
           <Input
             register={register('email')}
             label="E-mail"
             type="email"
             errorMessage={errors.email?.message}
+            disabled={true}
           />
-          <InputMask
-            mask="telephone"
+          <Input
             label="Telefone"
             type="tel"
             errorMessage={errors.telephone?.message}
             register={register('telephone')}
+            disabled={true}
           />
-          <InputMask
-            mask="cpf"
+          <Input
             label="CPF"
             type="tel"
             errorMessage={errors.cpf?.message}
             register={register('cpf')}
+            disabled={true}
           />
         </div>
         <div className={style.inputContainer}>
@@ -231,8 +250,8 @@ const Buy = () => {
           <Button type="submit">Continuar</Button>
         </div>
       </form>
-    </>
+    </div>
   )
 }
 
-export default Buy
+export default withAuth(Buy)

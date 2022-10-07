@@ -7,7 +7,7 @@ interface RadioGroupProps {
     value: any
   }>
   register?: any
-  errorMessage?: string
+  errorMessage?: any
 }
 
 const RadioGroup = ({ options, register, errorMessage }: RadioGroupProps) => {

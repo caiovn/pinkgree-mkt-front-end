@@ -8,22 +8,36 @@ import { useRouter } from 'next/router'
 import { useSetRecoilState } from 'recoil'
 import useFetch from '../../hooks/useFetch'
 import styles from './product.module.scss'
+import Loading from '@/components/Loading'
+import { useEffect } from 'react'
 
 const ProductPage = () => {
   const router = useRouter()
   const { slug } = router.query
   const setFormState = useSetRecoilState(recoilFormState)
   const { 0: productId, 1: skuCode } = slug
-  const { data: product, loading } = useFetch<any>(
+
+  useEffect(() => {}, [])
+  const {
+    data: product,
+    loading,
+    error,
+  } = useFetch<any>(
     'GET',
     skuCode ? `sku/${skuCode}` : `sku/product_skus/${productId}`
   )
 
-  if (loading) return <span>loading...</span>
+  if (error) return <h1>Deu erro :(</h1>
+
+  if (loading)
+    return (
+      <div className="loading-container">
+        <Loading />
+      </div>
+    )
 
   const productMain = skuCode ? product : product[0]
   const otherProducts = skuCode ? product.relatedSkus : product.slice(1)
-
 
   const handleClickBuy = () => {
     setFormState((oldFormState) => {
@@ -40,7 +54,7 @@ const ProductPage = () => {
               stockQuantity: productMain.stockQuantity,
               skuCode: productMain.skuCode,
               quantity: 1,
-              image: productMain.mainImageUrl
+              image: productMain.mainImageUrl,
             },
           ],
         },
