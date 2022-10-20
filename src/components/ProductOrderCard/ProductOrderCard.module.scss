@@ -1,0 +1,28 @@
+.container {
+  margin: 16px 0;
+  border: rgba(0, 0, 0, 0.4) solid 1px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 8px;
+}
+.image {
+  width: 7.5rem;
+}
+.imageWrapper {
+  width: 7.5rem;
+  // height: 7.5rem;
+}
+.textWrapper {
+  padding: 8px;
+}
+.productName {
+  font-size: 14px;
+  margin: 0 0 16px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.price {
+  margin: 0 auto;
+  font-size: 14px;
+}

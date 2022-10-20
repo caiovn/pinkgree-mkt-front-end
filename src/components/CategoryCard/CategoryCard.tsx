@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import styles from './CategoryCard.module.scss'
 
-export default function CategoryCard({ name, id, image }) {
+export default function CategoryCard({ name, id, image, href }) {
   return (
     <div className={styles.cardContainer}>
-      <Link href={`/category/${id}`}>
+      <Link href={href}>
         <a id={`category-${id}`} tabIndex={0}>
           <div
             className={styles.categoryImage}

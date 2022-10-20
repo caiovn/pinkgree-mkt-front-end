@@ -17,22 +17,24 @@ const Orders = () => {
   return (
     <>
       <h1>Meus pedidos</h1>
-      {/* TODO: Criar card para exibir pedidos */}
-
-      {orders &&
+      {orders?.length > 0 ?
         orders.map((order) => {
           console.log(order)
           return (
-            <div>
+            <div key={`${order.id}`}>
               <ProductCard
                 id={order.id}
                 name={order.productList[0].name}
+                mainImageUrl={order.productList[0].mainImageUrl}
                 price={order.productList[0].price.listPrice}
                 href={`${ROUTES.ORDERS}/${order.id}`}
               />
             </div>
           )
-        })}
+        })
+      : (
+        <span>Nenhum pedido feito ainda :(</span>
+      )}
     </>
   )
 }

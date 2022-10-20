@@ -149,7 +149,7 @@ type Order = {
   status: OrderStatus
   customerData: CustomerData
   shippingData: ShippingData
-  productList: Array<ProductList>
+  productList: Array<ISku>
   paymentData: {
     amount: number
     paymentMethod: string

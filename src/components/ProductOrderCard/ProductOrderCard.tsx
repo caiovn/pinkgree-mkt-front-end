@@ -1,16 +1,18 @@
-import Image from 'next/image'
 import React from 'react'
 import ROUTES from '@/routes/routes'
 import { convertToBRLCurrency } from '@/utils/currency'
-import styles from './ProductCard.module.scss'
+import styles from './ProductOrderCard.module.scss'
 
-const ProductCard = ({
+const ProductOrderCard = ({
   id,
   skuCode = '',
   name,
   price,
   mainImageUrl,
   href = null,
+  quantity,
+  freightPrice,
+  deliveryDays
 }) => {
   const handleChangeHref = () => {
     if (!href) return `${ROUTES.PRODUCT_PAGE}/${id}/${skuCode}`
@@ -28,12 +30,13 @@ const ProductCard = ({
           />
         )}
         <div className={styles.textWrapper}>
-          <h2 className={styles.productName}>{name}</h2>
+          <h2 className={styles.productName}>{quantity}x {name}</h2>
           <p className={styles.price}>{convertToBRLCurrency.format(price)}</p>
+          <p className={styles.price}>{deliveryDays} dias uteis | {convertToBRLCurrency.format(freightPrice)}</p>
         </div>
       </div>
     </a>
   )
 }
 
-export default ProductCard
+export default ProductOrderCard

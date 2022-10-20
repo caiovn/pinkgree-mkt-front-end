@@ -1,11 +1,10 @@
-import { Button, Carousel, CategoryCard } from '@/components/index'
+import { Carousel, CategoryCard } from '@/components/index'
 import { BASE_URL } from '@/constants/api'
 import { useKeycloak } from '@react-keycloak/ssr'
 import { KeycloakInstance } from 'keycloak-js'
 import { GetStaticProps } from 'next'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
-import { IBrand, ICategory } from 'src/types'
 
 interface HomeProps {
   categories: Array<ICategory>
@@ -43,6 +42,7 @@ const Home = ({ categories, brands }: HomeProps) => {
                   name={category.name}
                   id={category.id}
                   image={category.image}
+                  href={`/category/${category.id}`}
                 />
               )
             })}
@@ -58,6 +58,7 @@ const Home = ({ categories, brands }: HomeProps) => {
                   name={brand.name}
                   id={brand.id}
                   image={brand.brandImage}
+                  href={`/brand/${brand.id}`}
                 />
               )
             })}
