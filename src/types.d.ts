@@ -30,6 +30,7 @@ interface ISku {
   weight: number
   mainImageUrl: string
   urlImages: Array<string>
+  product: IProduct
   price: {
     listPrice: number
     salePrice?: number
