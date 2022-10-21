@@ -1,0 +1,9 @@
+.paymentMethodWrapper {
+  display: flex;
+  flex-direction: column;
+}
+.paymentDetails {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}

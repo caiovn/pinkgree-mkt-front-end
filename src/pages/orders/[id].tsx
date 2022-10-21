@@ -1,5 +1,6 @@
 import Loading from '@/components/Loading'
 import ProductOrderCard from '@/components/ProductOrderCard/ProductOrderCard'
+import Stepper from '@/components/Stepper/Stepper'
 import PAYMENT_FORM from '@/constants/paymentForm'
 import { convertToBRLCurrency } from '@/utils/currency'
 import { useKeycloak } from '@react-keycloak/ssr'
@@ -8,6 +9,7 @@ import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import useFetch from 'src/hooks/useFetch'
 import withAuth from 'src/hooks/withAuth'
+import styles from './orders.module.scss'
 
 interface OrderProps {
   createdAt: string
@@ -17,8 +19,8 @@ interface OrderProps {
   history: {
     status: string
     orderId: number
-    createdAt: string
-    updatedAt: string
+    createdAt: Date
+    updatedAt: Date
   }[]
   paymentData: {
     amount: number
@@ -66,7 +68,8 @@ const Orders = () => {
     `order/${id}`,
     new Headers({ Authorization: `Bearer ${keycloak.token}` })
   )
-  const address  = order?.shippingData?.address;
+
+  const address = order?.shippingData?.address
 
   const formattedAddress = useMemo(
     () =>
@@ -105,17 +108,20 @@ const Orders = () => {
         <h2>Endereço</h2>
         <span>{formattedAddress}</span>
       </div>
-      <div>
+      <div className={styles.paymentMethodWrapper}>
         <h2>Forma de pagamento</h2>
-        <p>
-          {PAYMENT_FORM[order.paymentData.paymentMethod]}
-        </p>
-        <p>**** **** **** {order.paymentData.paymentProperties.last4} | {convertToBRLCurrency.format(order.paymentData.amount)}</p>
-        <p>Data val: {order.paymentData.paymentProperties.validationDate}</p>
+        <span>{PAYMENT_FORM[order.paymentData.paymentMethod]}</span>
+        <div className={styles.paymentDetails}>
+          <span>
+            **** **** **** {order.paymentData.paymentProperties.last4}
+          </span>
+          <span>{convertToBRLCurrency.format(order.paymentData.amount)}</span>
+        </div>
+        {/* <p>Data val: {order.paymentData.paymentProperties.validationDate}</p> */}
       </div>
       <div>
         <h2>Status do pedido</h2>
-        <p>{JSON.stringify(order.history)}</p>
+        <Stepper steps={order.history} />
       </div>
     </div>
   )

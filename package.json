@@ -13,6 +13,7 @@
     "@hookform/resolvers": "^2.8.8",
     "@react-keycloak/ssr": "^3.3.0",
     "cookie": "^0.4.1",
+    "dayjs": "^1.11.5",
     "keycloak-js": "^15.0.0",
     "next": "12",
     "react": "^18.2.0",

@@ -26,7 +26,7 @@ const Orders = () => {
                 id={order.id}
                 name={order.productList[0].name}
                 mainImageUrl={order.productList[0].mainImageUrl}
-                price={order.productList[0].price.listPrice}
+                price={order.productList[0].price}
                 href={`${ROUTES.ORDERS}/${order.id}`}
               />
             </div>
