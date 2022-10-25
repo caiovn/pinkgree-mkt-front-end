@@ -39,3 +39,17 @@
   font-size: 20px;
   font-weight: bold;
 }
+.buttonContainer {
+  display: flex;
+}
+.favoriteButton {
+  background-color: transparent;
+  margin: 8px;
+  border-radius: 4px;
+  border: none;
+  padding: 12px 16px;
+  i {
+    color: #000;
+    font-size: 24px;
+  }
+}

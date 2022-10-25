@@ -9,15 +9,19 @@ import { useSetRecoilState } from 'recoil'
 import useFetch from '../../hooks/useFetch'
 import styles from './product.module.scss'
 import Loading from '@/components/Loading'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useKeycloak } from '@react-keycloak/ssr'
+import { KeycloakInstance } from 'keycloak-js'
+import { BASE_URL } from '@/constants/api'
 
 const ProductPage = () => {
+  const { keycloak } = useKeycloak<KeycloakInstance>()
   const router = useRouter()
   const { slug } = router.query
-  const setFormState = useSetRecoilState(recoilFormState)
   const { 0: productId, 1: skuCode } = slug
+  const setFormState = useSetRecoilState(recoilFormState)
+  const [isFavorite, setIsFavorite] = useState(false)
 
-  useEffect(() => {}, [])
   const {
     data: product,
     loading,
@@ -26,6 +30,22 @@ const ProductPage = () => {
     'GET',
     skuCode ? `sku/${skuCode}` : `sku/product_skus/${productId}`
   )
+
+  useEffect(() => {
+    console.log(keycloak)
+    if (keycloak.authenticated && product)
+      fetch(
+        `${BASE_URL}/favorite/product/${product?.skuCode}/user/${keycloak?.tokenParsed.sub}`,
+        {
+          headers: {
+            Authorization: `Bearer ${keycloak.token}`,
+          },
+        }
+      ).then((response) => {
+        if (response.status === 204) setIsFavorite(true)
+        else setIsFavorite(false)
+      })
+  }, [loading])
 
   if (error) return <h1>Deu erro :(</h1>
 
@@ -64,6 +84,32 @@ const ProductPage = () => {
     router.push('/buy')
   }
 
+  const handleChangeFavorite = (isAdition) => {
+    if(isAdition) {
+      fetch(`${BASE_URL}/favorite/product/${product.skuCode}/user/${keycloak?.tokenParsed.sub}`, { 
+        method: 'POST',
+        headers: {
+        Authorization: `Bearer ${keycloak.token}`,    
+        }
+      }).then((response) => {
+        if(response.status === 201) {
+          setIsFavorite(true)
+        }
+      })
+    } else {
+      fetch(`${BASE_URL}/favorite/product/${product.skuCode}/user/${keycloak?.tokenParsed.sub}`, { 
+        method: 'DELETE',
+        headers: {
+        Authorization: `Bearer ${keycloak.token}`,    
+        }
+      }).then((response) => {
+        if (response.status === 204) {
+          setIsFavorite(false)
+        }
+      })
+    }
+  }
+
   return (
     <div>
       <div className={styles.carousel}>
@@ -85,13 +131,24 @@ const ProductPage = () => {
           ))}
         </Carousel>
       </div>
-      <h2 className={styles.name}>{productMain.name}</h2>
-      <p className={styles.price}>
-        {convertToBRLCurrency.format(productMain.price.listPrice)}
-      </p>
-      <Button onClick={handleClickBuy} color="green">
-        Comprar agora
-      </Button>
+      <div>
+        <h2 className={styles.name}>{productMain.name}</h2>
+        <p className={styles.price}>
+          {convertToBRLCurrency.format(productMain.price.listPrice)}
+        </p>
+        <div className={styles.buttonContainer}>
+          <Button onClick={handleClickBuy} color="green">
+            Comprar agora
+          </Button>
+          <button className={styles.favoriteButton} onClick={() => handleChangeFavorite(!isFavorite)}>
+            {isFavorite ? (
+              <i className="fa-solid fa-heart"></i>
+              ) : (
+              <i className="fa-regular fa-heart"></i>
+            )}
+          </button>
+        </div>
+      </div>
       <div>
         {otherProducts && otherProducts.length > 0 && (
           <>
