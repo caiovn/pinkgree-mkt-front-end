@@ -35,7 +35,7 @@ const ProductPage = () => {
     console.log(keycloak)
     if (keycloak.authenticated && product)
       fetch(
-        `${BASE_URL}/favorite/product/${product?.skuCode}/user/${keycloak?.tokenParsed.sub}`,
+        `${BASE_URL}/favorite/product/${productMain?.skuCode}/user/${keycloak?.tokenParsed.sub}`,
         {
           headers: {
             Authorization: `Bearer ${keycloak.token}`,
@@ -86,7 +86,7 @@ const ProductPage = () => {
 
   const handleChangeFavorite = (isAdition) => {
     if(isAdition) {
-      fetch(`${BASE_URL}/favorite/product/${product.skuCode}/user/${keycloak?.tokenParsed.sub}`, { 
+      fetch(`${BASE_URL}/favorite/product/${productMain.skuCode}/user/${keycloak?.tokenParsed.sub}`, { 
         method: 'POST',
         headers: {
         Authorization: `Bearer ${keycloak.token}`,    
@@ -97,7 +97,7 @@ const ProductPage = () => {
         }
       })
     } else {
-      fetch(`${BASE_URL}/favorite/product/${product.skuCode}/user/${keycloak?.tokenParsed.sub}`, { 
+      fetch(`${BASE_URL}/favorite/product/${productMain.skuCode}/user/${keycloak?.tokenParsed.sub}`, { 
         method: 'DELETE',
         headers: {
         Authorization: `Bearer ${keycloak.token}`,    
