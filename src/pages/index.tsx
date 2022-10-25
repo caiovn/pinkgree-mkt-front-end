@@ -33,7 +33,7 @@ const Home = ({ categories, brands }: HomeProps) => {
       </Head>
       <section>
         <div>
-          <h1>Categories.</h1>
+          <h1>Categorias.</h1>
           <Carousel settings={{ variableWidth: true }}>
             {categories.map((category) => {
               return (
@@ -49,7 +49,7 @@ const Home = ({ categories, brands }: HomeProps) => {
           </Carousel>
         </div>
         <div>
-          <h1>Brands.</h1>
+          <h1>Marcas.</h1>
           <Carousel settings={{ variableWidth: true }}>
             {brands.map((brand) => {
               return (

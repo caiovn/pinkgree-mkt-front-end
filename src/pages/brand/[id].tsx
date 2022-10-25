@@ -12,7 +12,7 @@ const Category = () => {
 
   return (
     <div>
-      <h1>Categories.</h1>
+      <h1>Categorias.</h1>
       {products &&
         products.map((product) => {
           if (!product.active) return

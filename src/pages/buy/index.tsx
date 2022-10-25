@@ -14,7 +14,6 @@ import { useRouter } from 'next/router'
 import { useKeycloak } from '@react-keycloak/ssr'
 import { KeycloakInstance } from 'keycloak-js'
 import withAuth from 'src/hooks/withAuth'
-import { User } from 'src/types'
 import ROUTES from '@/routes/routes'
 
 const Buy = () => {
@@ -152,7 +151,7 @@ const Buy = () => {
 
   return (
     <div>
-      <h1>Buy.</h1>
+      <h1>Comprar.</h1>
       <h3>item a ser comprado.</h3>
       <ProductCard
         id={1}
