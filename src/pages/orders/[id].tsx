@@ -108,21 +108,30 @@ const Orders = () => {
         <h2>Endereço</h2>
         <span>{formattedAddress}</span>
       </div>
-      <div className={styles.paymentMethodWrapper}>
-        <h2>Forma de pagamento</h2>
-        <span>{PAYMENT_FORM[order.paymentData.paymentMethod]}</span>
-        <div className={styles.paymentDetails}>
-          <span>
-            **** **** **** {order.paymentData.paymentProperties.last4}
-          </span>
-          <span>{convertToBRLCurrency.format(order.paymentData.amount)}</span>
+      {order.paymentData ? (
+        <div className={styles.paymentMethodWrapper}>
+          <h2>Forma de pagamento</h2>
+          <span>{PAYMENT_FORM[order.paymentData.paymentMethod]}</span>
+          <div className={styles.paymentDetails}>
+            <span>
+              **** **** **** {order.paymentData.paymentProperties.last4}
+            </span>
+            <span>{convertToBRLCurrency.format(order.paymentData.amount)}</span>
+          </div>
+          {/* <p>Data val: {order.paymentData.paymentProperties.validationDate}</p> */}
         </div>
-        {/* <p>Data val: {order.paymentData.paymentProperties.validationDate}</p> */}
-      </div>
-      <div>
-        <h2>Status do pedido</h2>
-        <Stepper steps={order.history} />
-      </div>
+      ) : (
+        <div>
+          <h2>Pagamento</h2>
+          <span>Pagamento em processamento.</span>
+        </div>
+      )}
+      {order.history && (
+        <div>
+          <h2>Status do pedido</h2>
+          <Stepper steps={order.history} />
+        </div>
+      )}
     </div>
   )
 }

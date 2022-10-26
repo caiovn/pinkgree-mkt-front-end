@@ -85,28 +85,38 @@ const ProductPage = () => {
   }
 
   const handleChangeFavorite = (isAdition) => {
-    if(isAdition) {
-      fetch(`${BASE_URL}/favorite/product/${productMain.skuCode}/user/${keycloak?.tokenParsed.sub}`, { 
-        method: 'POST',
-        headers: {
-        Authorization: `Bearer ${keycloak.token}`,    
-        }
-      }).then((response) => {
-        if(response.status === 201) {
-          setIsFavorite(true)
-        }
-      })
+    if (keycloak.authenticated) {
+      if (isAdition) {
+        fetch(
+          `${BASE_URL}/favorite/product/${productMain.skuCode}/user/${keycloak?.tokenParsed.sub}`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${keycloak.token}`,
+            },
+          }
+        ).then((response) => {
+          if (response.status === 201) {
+            setIsFavorite(true)
+          }
+        })
+      } else {
+        fetch(
+          `${BASE_URL}/favorite/product/${productMain.skuCode}/user/${keycloak?.tokenParsed.sub}`,
+          {
+            method: 'DELETE',
+            headers: {
+              Authorization: `Bearer ${keycloak.token}`,
+            },
+          }
+        ).then((response) => {
+          if (response.status === 204) {
+            setIsFavorite(false)
+          }
+        })
+      }
     } else {
-      fetch(`${BASE_URL}/favorite/product/${productMain.skuCode}/user/${keycloak?.tokenParsed.sub}`, { 
-        method: 'DELETE',
-        headers: {
-        Authorization: `Bearer ${keycloak.token}`,    
-        }
-      }).then((response) => {
-        if (response.status === 204) {
-          setIsFavorite(false)
-        }
-      })
+      keycloak?.login()
     }
   }
 
@@ -140,10 +150,13 @@ const ProductPage = () => {
           <Button onClick={handleClickBuy} color="green">
             Comprar agora
           </Button>
-          <button className={styles.favoriteButton} onClick={() => handleChangeFavorite(!isFavorite)}>
+          <button
+            className={styles.favoriteButton}
+            onClick={() => handleChangeFavorite(!isFavorite)}
+          >
             {isFavorite ? (
               <i className="fa-solid fa-heart"></i>
-              ) : (
+            ) : (
               <i className="fa-regular fa-heart"></i>
             )}
           </button>
