@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react'
 import { useKeycloak } from '@react-keycloak/ssr'
 import { KeycloakInstance } from 'keycloak-js'
 import { BASE_URL } from '@/constants/api'
+import StarRatings from 'react-star-ratings'
 
 const ProductPage = () => {
   const { keycloak } = useKeycloak<KeycloakInstance>()
@@ -21,6 +22,7 @@ const ProductPage = () => {
   const { 0: productId, 1: skuCode } = slug
   const setFormState = useSetRecoilState(recoilFormState)
   const [isFavorite, setIsFavorite] = useState(false)
+  const [ratings, setRatings] = useState<IRating[]>()
 
   const {
     data: product,
@@ -32,8 +34,7 @@ const ProductPage = () => {
   )
 
   useEffect(() => {
-    console.log(keycloak)
-    if (keycloak.authenticated && product)
+    if (keycloak.authenticated && product) {
       fetch(
         `${BASE_URL}/favorite/product/${productMain?.skuCode}/user/${keycloak?.tokenParsed.sub}`,
         {
@@ -45,6 +46,21 @@ const ProductPage = () => {
         if (response.status === 204) setIsFavorite(true)
         else setIsFavorite(false)
       })
+
+      if (productMain?.skuCode) {
+        fetch(`${BASE_URL}/evaluations/product/${productMain.skuCode}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${keycloak.token}`,
+          },
+        })
+          .then((result) => result.json())
+          .then((data) => {
+            setRatings(data)
+          })
+      }
+    }
   }, [loading])
 
   if (error) return <h1>Deu erro :(</h1>
@@ -202,6 +218,37 @@ const ProductPage = () => {
           />
         </div>
       </details>
+      <div>
+        <h2>Avaliações</h2>
+        <div>
+          {ratings?.length > 0 ? (
+            ratings.map((rating, index) => (
+              <div key={index} className={styles.costumerRatingWrapper}>
+                <div className={styles.starRatingComponent}>
+                  <StarRatings
+                    rating={rating.stars}
+                    starDimension="24px"
+                    starRatedColor="#F7B32B"
+                    starHoverColor="#F7B32B"
+                    starEmptyColor="#605F5E"
+                  />
+                </div>
+                <div className={styles.commentRatingWrapper}>
+                  <div className={styles.ratingAuthor}>
+                    <span>"{rating.title}"</span>&nbsp;
+                    <span>- {rating.customer.name}</span>
+                  </div>
+                  <span>{rating.evaluation}</span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div>
+              <p>Sem avaliações :(</p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

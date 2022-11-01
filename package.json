@@ -21,6 +21,7 @@
     "react-hook-form": "^7.30.0",
     "react-input-mask": "^2.0.4",
     "react-slick": "^0.28.1",
+    "react-star-ratings": "^2.3.0",
     "recoil": "^0.7.5",
     "recoil-persist": "^3.0.0",
     "sass": "^1.38.1",

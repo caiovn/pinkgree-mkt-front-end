@@ -30,10 +30,11 @@ const regularFlow = [
 ]
 
 const Stepper = ({ steps }: StepperProps) => {
+  const lastItemIndex = steps.length - 1;
+
   const addFutureFlow = (lastItem: string) => {
-    const reversedRegularFlow = regularFlow.reverse()
+    const reversedRegularFlow = regularFlow.slice().reverse()
     const futureFlowIndex = reversedRegularFlow.findIndex((status) => {
-      console.log(status, lastItem)
       return status === lastItem
     })
   
@@ -48,7 +49,7 @@ const Stepper = ({ steps }: StepperProps) => {
     <div className={styles.stepperContainer}>
       {steps.map((step, index) => (
         <>
-          <div className={styles.stepperWrapper}>
+          <div className={styles.stepperWrapper} key={index}>
             <div className={styles.stepperCount}>{index + 1}</div>
             <span className={styles.stepperText}>
               {ORDER_STATUS[step.status]}
@@ -57,11 +58,13 @@ const Stepper = ({ steps }: StepperProps) => {
           <div className={styles.stepperDivider} />
         </>
       ))}
-      {addFutureFlow(steps.at(-1).status).map((step, index) => {
+      {addFutureFlow(steps[lastItemIndex].status).map((step, index) => {
+        const futureIndex = steps.length + index + 1
+        
         return (
           <>
-            <div className={styles.stepperWrapper}>
-              <div className={`${styles.stepperCount} ${styles.disabled}`}>{steps.length + index + 1}</div>
+            <div className={styles.stepperWrapper} key={futureIndex}>
+              <div className={`${styles.stepperCount} ${styles.disabled}`}>{futureIndex}</div>
               <span className={styles.stepperText}>{ORDER_STATUS[step]}</span>
             </div>
             <div className={styles.stepperDivider} />

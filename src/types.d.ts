@@ -8,6 +8,21 @@ interface ICategory extends IBrand {
   image: string
 }
 
+interface IRating {
+  id: number
+  orderId: number
+  customer: {
+    id: string
+    name: string
+    lastname: string
+  }
+  skuCode: string
+  stars: number
+  title: string
+  evaluation: string
+  createdAt: string
+}
+
 interface IProduct {
   active?: boolean
   brand?: IBrand

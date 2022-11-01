@@ -6,10 +6,16 @@ import { convertToBRLCurrency } from '@/utils/currency'
 import { useKeycloak } from '@react-keycloak/ssr'
 import { KeycloakInstance } from 'keycloak-js'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import useFetch from 'src/hooks/useFetch'
 import withAuth from 'src/hooks/withAuth'
 import styles from './orders.module.scss'
+import StarRatings from 'react-star-ratings'
+import Button from '@/components/Button'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as Yup from 'yup'
+import { BASE_URL } from '@/constants/api'
 
 interface OrderProps {
   createdAt: string
@@ -58,10 +64,28 @@ interface OrderProps {
   }
 }
 
+const RATING_TEXT = {
+  1: 'Péssimo',
+  2: 'Ruim',
+  3: 'Neutro',
+  4: 'Bom',
+  5: 'Excelente',
+}
+
 const Orders = () => {
   const router = useRouter()
   const { id } = router.query
   const { keycloak } = useKeycloak<KeycloakInstance>()
+  const [rating, setRating] = useState<number>(0)
+
+  const validationSchema = Yup.object().shape({
+    rating: Yup.number(),
+    comment: Yup.string(),
+  })
+
+  const { register, handleSubmit, setValue } = useForm({
+    resolver: yupResolver(validationSchema),
+  })
 
   const { data: order, loading } = useFetch<OrderProps>(
     'GET',
@@ -71,13 +95,42 @@ const Orders = () => {
 
   const address = order?.shippingData?.address
 
+  const lastItemHistoryIndex = order?.history.length - 1;
+
   const formattedAddress = useMemo(
     () =>
       `${address?.street} ${address?.number} ${address?.neighborhood} ${address?.city}, ${address?.state} ${address?.zipcode} - ${address?.country}`,
     [address]
   )
 
-  console.log(order)
+  const changeRating = (value) => {
+    setValue('rating', value)
+    setRating(value)
+  }
+
+  const onSubmit = (value) => {
+    const requestBody = {
+      stars: value.rating,
+      title: RATING_TEXT[rating],
+      evaluation: value.comment,
+    }
+
+    try {
+      fetch(
+        `${BASE_URL}/evaluations/order/${id}/product/${order.productList[0].skuCode}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${keycloak.token}`,
+          },
+          body: JSON.stringify(requestBody),
+        }
+      )
+    } catch (err) {
+      console.error('ERRO: ', err)
+    }
+  }
 
   if (loading)
     return (
@@ -131,6 +184,32 @@ const Orders = () => {
           <h2>Status do pedido</h2>
           <Stepper steps={order.history} />
         </div>
+      )}
+      {order.history[lastItemHistoryIndex].status === 'ORDER_SHIPPED' && (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className={styles.ratingWrapper}>
+            <h2>Avalie seu pedido</h2>
+            <div className={styles.ratingComponentWrapper}>
+              <StarRatings
+                rating={rating}
+                changeRating={changeRating}
+                starRatedColor="#F7B32B"
+                starHoverColor="#F7B32B"
+                starEmptyColor="#605F5E"
+              />
+            </div>
+            {rating !== 0 && (
+              <div className={styles.rateComment}>
+                {<p>{RATING_TEXT[rating]}</p>}
+                <textarea
+                  placeholder="Quer deixar um comentário?"
+                  {...register('comment')}
+                />
+                <Button type="submit">Enviar</Button>
+              </div>
+            )}
+          </div>
+        </form>
       )}
     </div>
   )

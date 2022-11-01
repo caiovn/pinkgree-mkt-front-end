@@ -53,3 +53,16 @@
     font-size: 24px;
   }
 }
+.starRatingComponent {
+  display: flex;
+}
+.commentRatingWrapper {
+  display: flex;
+  flex-direction: column;
+}
+.ratingAuthor {
+  padding: 12px 0;
+}
+.costumerRatingWrapper {
+  margin: 16px 0;
+}
