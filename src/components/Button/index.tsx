@@ -14,7 +14,7 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <button
-      className={styles.button}
+      className={`${styles.button} ${disabled && styles.disabled}`}
       onClick={onClick}
       style={{ background: color }}
       type={type}

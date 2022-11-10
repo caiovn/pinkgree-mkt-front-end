@@ -22,7 +22,7 @@ const ProductPage = () => {
   const { 0: productId, 1: skuCode } = slug
   const setFormState = useSetRecoilState(recoilFormState)
   const [isFavorite, setIsFavorite] = useState(false)
-  const [ratings, setRatings] = useState<IRating[]>()
+  const [ratings, setRatings] = useState<IRating>()
 
   const {
     data: product,
@@ -221,32 +221,45 @@ const ProductPage = () => {
       <div>
         <h2>Avaliações</h2>
         <div>
-          {ratings?.length > 0 ? (
-            ratings.map((rating, index) => (
-              <div key={index} className={styles.costumerRatingWrapper}>
-                <div className={styles.starRatingComponent}>
-                  <StarRatings
-                    rating={rating.stars}
-                    starDimension="24px"
-                    starRatedColor="#F7B32B"
-                    starHoverColor="#F7B32B"
-                    starEmptyColor="#605F5E"
-                  />
-                </div>
-                <div className={styles.commentRatingWrapper}>
-                  <div className={styles.ratingAuthor}>
-                    <span>"{rating.title}"</span>&nbsp;
-                    <span>- {rating.customer.name}</span>
+          <div>
+            <p>Avaliação média</p>
+            <StarRatings
+              rating={ratings?.average}
+              starDimension="40px"
+              starRatedColor="#F7B32B"
+              starHoverColor="#F7B32B"
+              starEmptyColor="#605F5E"
+            />
+          </div>
+          <p>{ratings?.count} avaliações</p>
+          <div>
+            {ratings?.data.length > 0 ? (
+              ratings.data.map((rating, index) => (
+                <div key={index} className={styles.costumerRatingWrapper}>
+                  <div className={styles.starRatingComponent}>
+                    <StarRatings
+                      rating={rating.stars}
+                      starDimension="24px"
+                      starRatedColor="#F7B32B"
+                      starHoverColor="#F7B32B"
+                      starEmptyColor="#605F5E"
+                    />
                   </div>
-                  <span>{rating.evaluation}</span>
+                  <div className={styles.commentRatingWrapper}>
+                    <div className={styles.ratingAuthor}>
+                      <span>"{rating.title}"</span>&nbsp;
+                      <span>- {rating.customer.name}</span>
+                    </div>
+                    <span>{rating.evaluation}</span>
+                  </div>
                 </div>
+              ))
+            ) : (
+              <div>
+                <p>Sem avaliações :(</p>
               </div>
-            ))
-          ) : (
-            <div>
-              <p>Sem avaliações :(</p>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

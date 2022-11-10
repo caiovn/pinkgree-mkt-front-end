@@ -6,7 +6,7 @@ import { convertToBRLCurrency } from '@/utils/currency'
 import { useKeycloak } from '@react-keycloak/ssr'
 import { KeycloakInstance } from 'keycloak-js'
 import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import useFetch from 'src/hooks/useFetch'
 import withAuth from 'src/hooks/withAuth'
 import styles from './orders.module.scss'
@@ -73,6 +73,10 @@ const RATING_TEXT = {
 }
 
 const Orders = () => {
+  const [order, setOrder] = useState<any>()
+  const [loading, setLoading] = useState(true)
+  const [isEvaluationSended, setEvaluationSended] = useState(true)
+  const [successMessage, setSuccessMessage] = useState<string>()
   const router = useRouter()
   const { id } = router.query
   const { keycloak } = useKeycloak<KeycloakInstance>()
@@ -83,19 +87,55 @@ const Orders = () => {
     comment: Yup.string(),
   })
 
-  const { register, handleSubmit, setValue } = useForm({
+  const { register, handleSubmit, setValue, formState } = useForm({
     resolver: yupResolver(validationSchema),
   })
 
-  const { data: order, loading } = useFetch<OrderProps>(
-    'GET',
-    `order/${id}`,
-    new Headers({ Authorization: `Bearer ${keycloak.token}` })
-  )
+  useEffect(() => {
+    callApi()
+  }, [])
+
+  const callApi = () => {
+    fetch(`${BASE_URL}/order/${id}`, {
+      headers: {
+        Authorization: `Bearer ${keycloak.token}`,
+      },
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        setOrder(data)
+        if (data?.status === 'ORDER_SHIPPED') {
+          fetch(
+            `${BASE_URL}/evaluations/order/${id}/product/${data?.productList[0].skuCode}`,
+            {
+              headers: {
+                Authorization: `Bearer ${keycloak.token}`,
+              },
+            }
+          )
+            .then((resp) => resp.json())
+            .then((evaluationData) => {
+              console.log(evaluationData)
+              if(evaluationData.stars) {
+                setValue('rating', evaluationData.stars)
+                setValue('comment', evaluationData.evaluation)
+                setRating(evaluationData.stars)
+                return setEvaluationSended(true)
+              }
+              setEvaluationSended(false)
+            })
+            .catch((err) => {
+              console.log(err)
+              setEvaluationSended(false)
+            })
+        }
+        setLoading(false)
+      })
+  }
 
   const address = order?.shippingData?.address
 
-  const lastItemHistoryIndex = order?.history.length - 1;
+  const lastItemHistoryIndex = order?.history.length - 1
 
   const formattedAddress = useMemo(
     () =>
@@ -126,7 +166,12 @@ const Orders = () => {
           },
           body: JSON.stringify(requestBody),
         }
-      )
+      ).then(response => {
+        if(response.status === 201) {
+          setEvaluationSended(true)
+          setSuccessMessage('Avaliação enviada com sucesso!')
+        }
+      })
     } catch (err) {
       console.error('ERRO: ', err)
     }
@@ -188,24 +233,39 @@ const Orders = () => {
       {order.history[lastItemHistoryIndex].status === 'ORDER_SHIPPED' && (
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.ratingWrapper}>
-            <h2>Avalie seu pedido</h2>
+            {isEvaluationSended ? (
+              <h2>Avaliação do pedido</h2>
+            ) : (
+              <h2>Avalie seu pedido</h2>
+            )}
             <div className={styles.ratingComponentWrapper}>
-              <StarRatings
-                rating={rating}
-                changeRating={changeRating}
-                starRatedColor="#F7B32B"
-                starHoverColor="#F7B32B"
-                starEmptyColor="#605F5E"
-              />
+              {isEvaluationSended ? (
+                <StarRatings
+                  rating={rating}
+                  starRatedColor="#F7B32B"
+                  starHoverColor="#F7B32B"
+                  starEmptyColor="#605F5E"
+                />
+              ) : (
+                <StarRatings
+                  rating={rating}
+                  changeRating={changeRating}
+                  starRatedColor="#F7B32B"
+                  starHoverColor="#F7B32B"
+                  starEmptyColor="#605F5E"
+                />
+              )}
             </div>
             {rating !== 0 && (
               <div className={styles.rateComment}>
                 {<p>{RATING_TEXT[rating]}</p>}
                 <textarea
                   placeholder="Quer deixar um comentário?"
+                  disabled={isEvaluationSended}
                   {...register('comment')}
                 />
-                <Button type="submit">Enviar</Button>
+                {successMessage && <span>{successMessage}</span>}
+                <Button disabled={isEvaluationSended} type="submit">Enviar</Button>
               </div>
             )}
           </div>
