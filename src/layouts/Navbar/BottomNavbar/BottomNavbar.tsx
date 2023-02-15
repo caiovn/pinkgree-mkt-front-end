@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import styles from './BottomNavbar.module.css'
+import styles from './BottomNavbar.module.scss'
 import { NAVBAR_ITEMS } from './constants/navbarItems'
 
 const BottomNavbar = () => {

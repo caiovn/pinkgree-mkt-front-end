@@ -8,5 +8,6 @@ enum ROUTES {
   CONCLUSION = '/conclusion',
   PAYMENT = '/payment'
 }
+// só fumo temaki!!
 
 export default ROUTES
