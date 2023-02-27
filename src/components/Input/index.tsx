@@ -23,9 +23,8 @@ const Input = ({
   width,
   disabled,
 }: InputProps) => {
-
   return (
-    <div className={styles.inputContainer} style={{width: width}}>
+    <div className={styles.inputContainer}>
       <div className={styles.MessageWrapper}>
         {label && <label className={styles.label}>{label}</label>}
         {errorMessage && (
@@ -33,6 +32,7 @@ const Input = ({
         )}
       </div>
       <input
+        style={{ width: width }}
         id={id}
         className={styles.input}
         type={type}
@@ -46,7 +46,6 @@ const Input = ({
         disabled={disabled}
         {...register}
       />
-
     </div>
   )
 }

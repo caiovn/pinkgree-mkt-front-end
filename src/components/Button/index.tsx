@@ -3,20 +3,22 @@ import styles from './Button.module.scss'
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   color?: string
+  bgColor?: string
 }
 
 const Button = ({
-  color = 'black',
+  color = 'white',
   type = 'button',
   onClick,
   disabled,
+  bgColor = 'black',
   children,
 }: ButtonProps) => {
   return (
     <button
       className={`${styles.button} ${disabled && styles.disabled}`}
       onClick={onClick}
-      style={{ background: color }}
+      style={{ background: bgColor, color: color }}
       type={type}
       disabled={disabled}
     >

@@ -13,7 +13,11 @@
 .buttonWrapper {
   background: transparent;
   border: none;
-  font-size: 16px;
+}
+
+.logoutContainer {
+  display: flex;
+  flex-direction: column;
 }
 
 .logo {
@@ -31,7 +35,6 @@
 /* DESKTOP */
 @media (min-width: 768px) {
   .container {
-    justify-content: start;
     gap: 24px;
 
     div {

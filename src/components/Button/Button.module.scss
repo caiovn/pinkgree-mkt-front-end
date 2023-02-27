@@ -1,11 +1,15 @@
 .button {
-  color: #FFFFFF;
+  display: flex;
   border: none;
   border-radius: 4px;
   width: 100%;
   padding: 12px 16px;
-  margin: 8px 0;
-  font-size: 20px;
+  gap: 12px;
+
+  @media (min-width: 768px) {
+    padding: 6px 8px;
+    width: auto;
+  }
 }
 .disabled {
   background-color: gray !important;
