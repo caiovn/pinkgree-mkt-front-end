@@ -5,6 +5,7 @@ enum ROUTES {
   MENU = '/menu',
   PRODUCT_PAGE = '/product',
   ORDERS = '/orders',
+  CATALOG_ADMINISTRATION = '/catalog-administration',
   CONCLUSION = '/conclusion',
   PAYMENT = '/payment'
 }

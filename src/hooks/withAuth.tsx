@@ -4,13 +4,17 @@ import type { KeycloakInstance } from 'keycloak-js'
 import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 
+export type AuthenticatedPageProps = {
+  keycloak: KeycloakInstance
+} & Record<string, unknown>
+
 const withAuth =
   <PageProps extends Record<string, unknown>>(
-    Page: NextPage<PageProps>
+    Page: NextPage<AuthenticatedPageProps>
   ): NextPage<PageProps> =>
   ({ ...props }) => {
     const { keycloak, initialized } = useKeycloak<KeycloakInstance>()
-    const [isAuthenticated, setAuthenticaded] = useState(false)
+    const [isAuthenticated, setAuthenticaded] = useState<boolean>(false)
     const [isInitialized, setInitialized] = useState<boolean>(false)
 
     useEffect(() => {
@@ -25,7 +29,7 @@ const withAuth =
     return (
       <>
         {isInitialized && isAuthenticated ? (
-          <Page {...(props as PageProps)} />
+          <Page {...(props as AuthenticatedPageProps)} keycloak={keycloak} />
         ) : (
           <div className="loading-container">
             <Loading />
